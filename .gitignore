@@ -51,6 +51,8 @@ out/
 *.tmp
 .env
 .env.*
+!backend/.env.example
+!backend/.env.postgres.example
 .idea/
 /.vscode/# Miscellaneous
 *.class
