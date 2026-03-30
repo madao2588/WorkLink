@@ -1,0 +1,564 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:my_first_app/app/shared/models/user_model.dart';
+import 'package:my_first_app/app/theme/app_theme.dart';
+import 'package:my_first_app/features/contacts/presentation/providers/contacts_provider.dart';
+
+class ContactScreen extends StatefulWidget {
+  const ContactScreen({super.key});
+
+  @override
+  State<ContactScreen> createState() => _ContactScreenState();
+}
+
+class _ContactScreenState extends State<ContactScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _keyword = '';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      context.read<ContactsProvider>().loadContacts();
+    });
+    _searchController.addListener(() {
+      setState(() {
+        _keyword = _searchController.text.trim();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ContactsProvider contactsProvider = context.watch<ContactsProvider>();
+    final List<UserModel> allUsers = contactsProvider.contacts;
+    final List<UserModel> filteredUsers = _filterUsers(allUsers);
+    final List<UserModel> onlineUsers =
+        filteredUsers.where((UserModel user) => user.isOnline).toList();
+    final Map<String, List<UserModel>> groupedUsers =
+        _groupUsersByDepartment(filteredUsers);
+
+    return Scaffold(
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+              sliver: SliverList.list(
+                children: <Widget>[
+                  _buildHeader(onlineUsers.length),
+                  const SizedBox(height: 20),
+                  _buildSearchBox(),
+                  const SizedBox(height: 20),
+                  if (contactsProvider.isLoading)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  else if (contactsProvider.errorMessage != null)
+                    _buildMessageCard(contactsProvider.errorMessage!)
+                  else ...<Widget>[
+                    _buildOnlineSection(onlineUsers),
+                    const SizedBox(height: 24),
+                    _buildSectionTitle(
+                      title: 'Directory',
+                      subtitle: _keyword.isEmpty
+                          ? 'Browse colleagues by department and online status'
+                          : 'Results are filtered by name and department',
+                    ),
+                    const SizedBox(height: 14),
+                    if (groupedUsers.isEmpty)
+                      _buildEmptyState()
+                    else
+                      ...groupedUsers.entries.map(_buildDepartmentSection),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<UserModel> _filterUsers(List<UserModel> users) {
+    if (_keyword.isEmpty) {
+      return users;
+    }
+    final String query = _keyword.toLowerCase();
+    return users.where((UserModel user) {
+      return user.name.toLowerCase().contains(query) ||
+          user.department.toLowerCase().contains(query);
+    }).toList();
+  }
+
+  Map<String, List<UserModel>> _groupUsersByDepartment(List<UserModel> users) {
+    final Map<String, List<UserModel>> grouped = <String, List<UserModel>>{};
+    for (final UserModel user in users) {
+      grouped.putIfAbsent(user.department, () => <UserModel>[]).add(user);
+    }
+    return grouped;
+  }
+
+  Widget _buildHeader(int onlineCount) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: <Color>[Color(0xFF153DBD), Color(0xFF2C71F7)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: AppColors.brandBlue.withAlpha(30),
+            blurRadius: 24,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha(26),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.groups_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha(24),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  '$onlineCount online',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 22),
+          const Text(
+            'Contacts',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Now powered by the backend directory service and kept in sync with online status.',
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.6,
+              color: Colors.white.withAlpha(220),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBox() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withAlpha(8),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search people or departments',
+          prefixIcon: const Icon(Icons.search_rounded),
+          suffixIcon: _keyword.isEmpty
+              ? null
+              : IconButton(
+                  onPressed: _searchController.clear,
+                  icon: const Icon(Icons.close_rounded),
+                ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: const BorderSide(
+              color: AppColors.brandBlue,
+              width: 1.5,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOnlineSection(List<UserModel> onlineUsers) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _buildSectionTitle(
+          title: 'Online now',
+          subtitle: 'Good candidates for quick collaboration',
+        ),
+        const SizedBox(height: 14),
+        if (onlineUsers.isEmpty)
+          _buildMessageCard('No online contacts matched the current search')
+        else
+          SizedBox(
+            height: 92,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: onlineUsers.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (BuildContext context, int index) {
+                return _OnlineUserCard(user: onlineUsers[index]);
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildSectionTitle({
+    required String title,
+    required String subtitle,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          subtitle,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColors.textSecondary,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDepartmentSection(MapEntry<String, List<UserModel>> entry) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 2, bottom: 12),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration: const BoxDecoration(
+                    color: AppColors.brandBlue,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  entry.key,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${entry.value.length} people',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ...entry.value.map(
+            (UserModel user) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _ContactCard(user: user),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageCard(String message) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Text(
+        message,
+        style: const TextStyle(color: AppColors.textSecondary),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: const Column(
+        children: <Widget>[
+          Icon(
+            Icons.manage_search_rounded,
+            size: 40,
+            color: AppColors.textHint,
+          ),
+          SizedBox(height: 12),
+          Text(
+            'No contacts matched your search',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: 6),
+          Text(
+            'Try another keyword or clear the filter',
+            style: TextStyle(color: AppColors.textSecondary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OnlineUserCard extends StatelessWidget {
+  const _OnlineUserCard({required this.user});
+
+  final UserModel user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 172,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.border),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withAlpha(8),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: const Color(0xFFEAF1FF),
+                child: Text(
+                  user.avatar,
+                  style: const TextStyle(
+                    color: AppColors.brandBlue,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 1,
+                bottom: 1,
+                child: Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: AppColors.success,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  user.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  user.department,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ContactCard extends StatelessWidget {
+  const _ContactCard({required this.user});
+
+  final UserModel user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withAlpha(7),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: <Widget>[
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: const Color(0xFFEAF1FF),
+            child: Text(
+              user.avatar,
+              style: const TextStyle(
+                color: AppColors.brandBlue,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        user.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: user.isOnline
+                            ? AppColors.success.withAlpha(18)
+                            : AppColors.textHint.withAlpha(14),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        user.isOnline ? 'Online' : 'Offline',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: user.isOnline
+                              ? AppColors.success
+                              : AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  user.department,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

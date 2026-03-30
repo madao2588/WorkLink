@@ -36,7 +36,9 @@ __pycache__/
 *.pyd
 *.db
 *.duckdb
+*.duckdb*
 backend/*.duckdb
+backend/*.duckdb*
 
 # JetBrains
 *.iml
