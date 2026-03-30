@@ -37,10 +37,11 @@ pip install -r requirements.txt
 
 ```powershell
 Copy-Item .env.example .env
+python -m app.scripts.init_db --seed
 uvicorn app.main:app --reload
 ```
 
-默认开发数据库是 `backend/worklink.duckdb`。应用启动时会自动建表、执行轻量迁移，并注入种子数据。
+默认开发数据库是 `backend/worklink.duckdb`。数据库初始化、迁移和种子数据注入现在通过独立脚本完成，不再在应用启动时自动执行。
 
 ## PostgreSQL 模式
 
@@ -57,6 +58,7 @@ docker compose up -d
 Copy-Item .env.postgres.example .env
 .\.venv\Scripts\activate
 pip install -r requirements.txt
+python -m app.scripts.init_db --seed
 uvicorn app.main:app --reload
 ```
 
@@ -99,6 +101,10 @@ cd backend
 ## 关键环境变量
 
 - `APP_NAME`
+- `APP_ENV`
+- `APP_DEBUG`
+- `APP_LOG_LEVEL`
+- `APP_EXPOSE_INTERNAL_ERRORS`
 - `API_V1_PREFIX`
 - `SECRET_KEY`
 - `ACCESS_TOKEN_EXPIRE_MINUTES`

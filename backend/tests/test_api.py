@@ -3,11 +3,17 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-os.environ["DATABASE_URL"] = f"duckdb:///{Path(__file__).resolve().parent / 'test_worklink.duckdb'}"
+test_db_path = Path(__file__).resolve().parent / "test_worklink.duckdb"
+if test_db_path.exists():
+    test_db_path.unlink()
 
-from app.main import app, initialize_database
+os.environ["APP_ENV"] = "test"
+os.environ["DATABASE_URL"] = f"duckdb:///{test_db_path}"
 
-initialize_database()
+from app.main import app
+from app.services.database_setup import initialize_database
+
+initialize_database(seed=True)
 client = TestClient(app)
 
 
@@ -63,3 +69,30 @@ def test_chat_send_message() -> None:
     )
     assert response.status_code == 200
     assert response.json()["data"]["status"] == "SENT"
+
+
+def test_invalid_login_returns_unified_error() -> None:
+    response = client.post(
+        "/api/v1/auth/login",
+        json={
+            "loginId": "zhangsan",
+            "password": "wrong-password",
+            "deviceName": "Pytest",
+            "platform": "windows",
+        },
+    )
+    assert response.status_code == 401
+    body = response.json()
+    assert body["code"] == "AUTH_401"
+    assert body["message"] == "Invalid credentials"
+    assert body["data"] is None
+    assert body["traceId"] is not None
+
+
+def test_missing_bearer_returns_unified_error() -> None:
+    response = client.get("/api/v1/auth/me")
+    assert response.status_code == 401
+    body = response.json()
+    assert body["code"] == "AUTH_401"
+    assert body["message"] == "Missing bearer token"
+    assert body["data"] is None

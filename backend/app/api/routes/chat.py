@@ -1,11 +1,12 @@
 from datetime import UTC, datetime
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, WebSocket, WebSocketDisconnect, status
+from fastapi import APIRouter, Depends, Query, Request, WebSocket, WebSocketDisconnect
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.deps import get_current_user
+from app.core.exceptions import NotFoundException
 from app.core.response import paginated_response, success_response
 from app.core.security import get_subject_from_token
 from app.db.session import get_db
@@ -20,10 +21,10 @@ def _find_peer(conversation_id: str, current_user_id: str, db: Session) -> User:
     members = db.scalars(select(ConversationMember).where(ConversationMember.conversation_id == conversation_id)).all()
     peer_member = next((member for member in members if member.user_id != current_user_id), None)
     if not peer_member:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Peer not found")
+        raise NotFoundException(message="Peer not found")
     peer = db.get(User, peer_member.user_id)
     if not peer:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Peer not found")
+        raise NotFoundException(message="Peer not found")
     return peer
 
 
@@ -36,7 +37,7 @@ def _build_summary(conversation_id: str, current_user: User, db: Session) -> dic
         )
     )
     if not conversation or not membership:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation not found")
+        raise NotFoundException(message="Conversation not found")
     peer = _find_peer(conversation_id, current_user.id, db)
     latest_message = db.scalar(
         select(Message).where(Message.conversation_id == conversation_id).order_by(Message.sent_at.desc())
@@ -218,7 +219,7 @@ def mark_read(
         )
     )
     if not membership:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation membership not found")
+        raise NotFoundException(message="Conversation membership not found")
     membership.unread_count = 0
     membership.last_read_message_id = payload.lastReadMessageId
     db.commit()
@@ -240,7 +241,7 @@ def update_preferences(
         )
     )
     if not membership:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation membership not found")
+        raise NotFoundException(message="Conversation membership not found")
     if payload.isPinned is not None:
         membership.is_pinned = payload.isPinned
     if payload.isMuted is not None:

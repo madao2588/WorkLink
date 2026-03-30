@@ -42,10 +42,11 @@ python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
 Copy-Item .env.example .env
+python -m app.scripts.init_db --seed
 uvicorn app.main:app --reload
 ```
 
-默认会启动在 `http://127.0.0.1:8000`，并自动初始化本地 DuckDB 数据库。
+默认会启动在 `http://127.0.0.1:8000`。数据库初始化、迁移和种子数据现在由独立脚本完成，不再在应用启动时自动执行。
 
 ### 2. 启动 Flutter 前端
 
@@ -93,6 +94,13 @@ cd backend
 .\.venv\Scripts\python.exe -m pytest
 ```
 
+### CI
+
+仓库现在包含 GitHub Actions 工作流：
+
+- Flutter：`flutter pub get`、`flutter analyze`、`flutter test`
+- Backend：`pip install -r backend/requirements.txt`、`python -m pytest`
+
 ## 默认测试账号
 
 - 用户名：`zhangsan`
@@ -111,3 +119,4 @@ cd backend
 - 仓库新增了 `.editorconfig`，统一文本文件按 UTF-8 保存，减少中文文档和跨平台协作时的编码问题。
 - `pubspec.lock` 当前已纳入版本控制，适合团队协作时固定依赖版本。
 - 后端默认使用 DuckDB 进行本地开发，如需切换 PostgreSQL，可参考 [backend/README.md](backend/README.md)。
+- 后端现在支持 `APP_ENV`、`APP_DEBUG`、`APP_LOG_LEVEL`、`APP_EXPOSE_INTERNAL_ERRORS` 等环境配置，开发和生产行为可以分开控制。

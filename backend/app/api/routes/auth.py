@@ -1,10 +1,11 @@
 from datetime import UTC, datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.deps import get_current_user
+from app.core.exceptions import UnauthorizedException
 from app.core.response import success_response
 from app.core.security import create_access_token, create_refresh_token, verify_password
 from app.db.session import get_db
@@ -25,7 +26,7 @@ def _mask_mobile(mobile: str) -> str:
 def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)) -> dict:
     user = db.scalar(select(User).where(User.login_id == payload.loginId))
     if not user or not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        raise UnauthorizedException(message="Invalid credentials")
 
     access_token = create_access_token(user.id)
     refresh_token = create_refresh_token()
@@ -75,7 +76,7 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
 def refresh_access_token(payload: RefreshTokenRequest, request: Request, db: Session = Depends(get_db)) -> dict:
     token_record = db.scalar(select(RefreshToken).where(RefreshToken.token == payload.refreshToken))
     if not token_record or token_record.revoked or token_record.expires_at < datetime.now(UTC):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+        raise UnauthorizedException(message="Invalid refresh token")
 
     access_token = create_access_token(token_record.user_id)
     return success_response(
