@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/router/app_router.dart';
+import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/auth/presentation/providers/user_provider.dart';
 import 'package:my_first_app/features/profile/domain/models/profile_overview.dart';
@@ -150,113 +151,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileHero(ProfileOverview overview) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: <Color>[Color(0xFF173ECA), Color(0xFF2D77F8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return AppHeroCard(
+      title: overview.user.name,
+      subtitle: overview.user.department,
+      badgeText: overview.user.isOnline ? '在线办公中' : '已认证账号',
+      leading: Container(
+        width: 70,
+        height: 70,
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(22),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withAlpha(36)),
         ),
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: AppColors.brandBlue.withAlpha(28),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
+        alignment: Alignment.center,
+        child: Text(
+          overview.user.avatar,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
           ),
-        ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(22),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withAlpha(36)),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  overview.user.avatar,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(20),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(
-                      overview.user.isOnline
-                          ? Icons.verified_user
-                          : Icons.schedule,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      overview.user.isOnline ? '在线办公中' : '已认证账号',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(
-            overview.user.name,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            overview.user.department,
-            style: TextStyle(
-              color: Colors.white.withAlpha(220),
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 18),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withAlpha(20),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withAlpha(28)),
-            ),
-            child: Text(
-              overview.hasCheckedIn
-                  ? '今天已完成打卡，未读消息 ${overview.unreadMessageCount} 条，适合优先处理待审批事项。'
-                  : '今天还没打卡，建议先完成出勤确认，再回到消息和审批里处理待办。',
-              style: TextStyle(height: 1.6, color: Colors.white.withAlpha(220)),
-            ),
-          ),
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(20),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withAlpha(28)),
+        ),
+        child: Text(
+          overview.hasCheckedIn
+              ? '今天已完成打卡，未读消息 ${overview.unreadMessageCount} 条，适合优先处理待审批事项。'
+              : '今天还没打卡，建议先完成出勤确认，再回到消息和审批里处理待办。',
+          style: TextStyle(height: 1.6, color: Colors.white.withAlpha(220)),
+        ),
       ),
     );
   }

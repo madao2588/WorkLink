@@ -51,6 +51,16 @@ class ChatProvider with ChangeNotifier {
     return _repository.getMessages(userId);
   }
 
+  ConversationSummary? conversationSummaryFor(String userId) {
+    for (final ConversationSummary summary
+        in _repository.getConversationSummaries()) {
+      if (summary.userId == userId) {
+        return summary;
+      }
+    }
+    return null;
+  }
+
   Future<void> ensureMessagesLoaded(String userId) async {
     try {
       await _repository.loadMessages(userId);
@@ -69,12 +79,22 @@ class ChatProvider with ChangeNotifier {
   String latestPreviewFor(String userId) => _repository.latestPreviewFor(userId);
 
   Future<void> markConversationRead(String userId) async {
-    await _repository.markConversationRead(userId);
-    notifyListeners();
+    try {
+      await _repository.markConversationRead(userId);
+      notifyListeners();
+    } on ApiException catch (error) {
+      _errorMessage = error.message;
+      notifyListeners();
+    }
   }
 
   Future<void> sendMessage(String userId, String content) async {
-    await _repository.sendMessage(userId, content);
-    notifyListeners();
+    try {
+      await _repository.sendMessage(userId, content);
+      notifyListeners();
+    } on ApiException catch (error) {
+      _errorMessage = error.message;
+      notifyListeners();
+    }
   }
 }

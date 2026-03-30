@@ -1,0 +1,43 @@
+{
+  "@@locale": "zh",
+  "loginPleaseEnterAccountAndPassword": "请输入账号和密码",
+  "loginFailed": "登录失败",
+  "loginDemoAccount": "演示账号：zhangsan / 123456",
+  "loginHeroBrand": "WORKLINK",
+  "loginHeroTitle": "连接团队协作工作流",
+  "loginHeroSubtitle": "登录以同步消息、审批、考勤、通讯录以及你的工作台总览。",
+  "loginTitleWelcomeBack": "欢迎回来",
+  "loginSubtitleDemoAccount": "使用后端演示账号进入已连接的工作空间。",
+  "loginLabelAccount": "账号",
+  "loginLabelPassword": "密码",
+  "loginConnecting": "正在连接...",
+  "loginEnterWorkLink": "进入 WorkLink",
+
+  "contactsHeaderOnlineCount": "{count} 在线",
+  "contactsTitle": "通讯录",
+  "contactsSubtitle": "由后端目录服务驱动，并与在线状态保持同步。",
+  "contactsDirectoryTitle": "目录",
+  "contactsDirectorySubtitleDefault": "按部门与在线状态浏览同事",
+  "contactsDirectorySubtitleFiltered": "结果已按姓名与部门筛选",
+  "contactsSearchHint": "搜索人员或部门",
+  "contactsOnlineNowTitle": "在线同事",
+  "contactsOnlineNowSubtitle": "优先联系更适合快速协作的同事",
+  "contactsNoOnlineMatched": "没有找到与当前搜索条件匹配的在线联系人",
+  "contactsPeopleCount": "{count} 人",
+  "contactsNoContactsMatched": "没有找到与搜索条件匹配的联系人",
+  "contactsTryAnotherKeyword": "尝试其他关键词或清除筛选条件",
+  "contactsOnline": "在线",
+  "contactsOffline": "离线",
+
+  "@contactsHeaderOnlineCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@contactsPeopleCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
+}
+

@@ -10,7 +10,7 @@ class AttendanceProvider with ChangeNotifier {
 
   final ApiClient _apiClient;
 
-  String _checkInTime = 'Not checked in';
+  String _checkInTime = '未打卡';
   String _statusCode = 'NOT_CHECKED_IN';
   bool _hasCheckedIn = false;
   bool _isLoading = false;
@@ -39,7 +39,7 @@ class AttendanceProvider with ChangeNotifier {
       unawaited(loadToday());
       return;
     }
-    _checkInTime = 'Not checked in';
+    _checkInTime = '未打卡';
     _statusCode = 'NOT_CHECKED_IN';
     _hasCheckedIn = false;
     _errorMessage = null;
@@ -57,7 +57,7 @@ class AttendanceProvider with ChangeNotifier {
       final String? checkInTime = data['checkInTime'] as String?;
       _hasCheckedIn = data['hasCheckedIn'] as bool? ?? false;
       _checkInTime = checkInTime == null
-          ? 'Not checked in'
+          ? '未打卡'
           : DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(checkInTime).toLocal());
     } on ApiException catch (error) {
       _errorMessage = error.message;

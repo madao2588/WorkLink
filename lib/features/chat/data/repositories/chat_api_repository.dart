@@ -34,11 +34,11 @@ class ChatApiRepository implements ChatRepository {
 
   @override
   String latestPreviewFor(String userId) =>
-      _summaryFor(userId)?.latestPreview ?? 'Start a new chat';
+      _summaryFor(userId)?.latestPreview ?? '新建聊天';
 
   @override
   int get totalMessageCount =>
-      _messagesByUserId.values.fold<int>(0, (int sum, List<ChatMessageModel> list) => sum + list.length);
+      _summaries.fold<int>(0, (int sum, ConversationSummary s) => sum + s.unreadCount);
 
   @override
   int get unreadConversationCount =>
@@ -46,6 +46,65 @@ class ChatApiRepository implements ChatRepository {
 
   @override
   Future<void> loadConversations() async {
+    // 首刷/刷新只加载会话元信息（summary + conversationId 映射）。
+    // 进入聊天详情后再按 userId 加载具体 messages。
+    await _loadConversations(shouldLoadMessages: false);
+  }
+
+  @override
+  Future<void> loadMessages(String userId) async {
+    await _ensureConversationIdsLoaded(userId);
+    final String conversationId = _requireConversationId(userId);
+    final dynamic data = await _apiClient.get('/chat/conversations/$conversationId/messages');
+    final List<dynamic> items = data as List<dynamic>? ?? <dynamic>[];
+    _messagesByUserId[userId] = items.map((dynamic item) {
+      final Map<String, dynamic> json = item as Map<String, dynamic>;
+      return ChatMessageModel(
+        id: json['messageId'] as String,
+        senderId: json['senderId'] as String,
+        content: json['content'] as String,
+        timestamp: DateTime.parse(json['sentAt'] as String).toLocal(),
+        isMe: json['isMe'] as bool? ?? false,
+        isRead: json['isRead'] as bool? ?? true,
+      );
+    }).toList();
+  }
+
+  @override
+  Future<void> markConversationRead(String userId) async {
+    await _ensureConversationIdsLoaded(userId);
+    final String conversationId = _requireConversationId(userId);
+    final List<ChatMessageModel> messages = _messagesByUserId[userId] ?? const <ChatMessageModel>[];
+    final String? lastMessageId = messages.isEmpty ? null : messages.last.id;
+    await _apiClient.post(
+      '/chat/conversations/$conversationId/read',
+      body: <String, dynamic>{'lastReadMessageId': lastMessageId},
+    );
+    await loadConversations();
+  }
+
+  @override
+  Future<void> sendMessage(String userId, String content) async {
+    await _ensureConversationIdsLoaded(userId);
+    final String conversationId = _requireConversationId(userId);
+    await _apiClient.post(
+      '/chat/conversations/$conversationId/messages',
+      body: <String, dynamic>{'messageType': 'TEXT', 'content': content},
+    );
+    await loadMessages(userId);
+    await loadConversations();
+  }
+
+  Future<void> _ensureConversationIdsLoaded(String userId) async {
+    if (_conversationIdsByUserId.containsKey(userId)) {
+      return;
+    }
+    // Deep link 场景下，只需要 conversationId 映射即可，避免重复拉全量消息。
+    await _loadConversations(shouldLoadMessages: false);
+  }
+
+  Future<void> _loadConversations({required bool shouldLoadMessages}) async {
+    _conversationIdsByUserId.clear();
     final dynamic data = await _apiClient.get('/chat/conversations');
     final List<dynamic> items = (data['items'] as List<dynamic>? ?? <dynamic>[]);
 
@@ -68,50 +127,13 @@ class ChatApiRepository implements ChatRepository {
       return summary;
     }).toList();
 
+    if (!shouldLoadMessages) {
+      return;
+    }
+
     for (final ConversationSummary summary in _summaries) {
       await loadMessages(summary.userId);
     }
-  }
-
-  @override
-  Future<void> loadMessages(String userId) async {
-    final String conversationId = _requireConversationId(userId);
-    final dynamic data = await _apiClient.get('/chat/conversations/$conversationId/messages');
-    final List<dynamic> items = data as List<dynamic>? ?? <dynamic>[];
-    _messagesByUserId[userId] = items.map((dynamic item) {
-      final Map<String, dynamic> json = item as Map<String, dynamic>;
-      return ChatMessageModel(
-        id: json['messageId'] as String,
-        senderId: json['senderId'] as String,
-        content: json['content'] as String,
-        timestamp: DateTime.parse(json['sentAt'] as String).toLocal(),
-        isMe: json['isMe'] as bool? ?? false,
-        isRead: json['isRead'] as bool? ?? true,
-      );
-    }).toList();
-  }
-
-  @override
-  Future<void> markConversationRead(String userId) async {
-    final String conversationId = _requireConversationId(userId);
-    final List<ChatMessageModel> messages = _messagesByUserId[userId] ?? const <ChatMessageModel>[];
-    final String? lastMessageId = messages.isEmpty ? null : messages.last.id;
-    await _apiClient.post(
-      '/chat/conversations/$conversationId/read',
-      body: <String, dynamic>{'lastReadMessageId': lastMessageId},
-    );
-    await loadConversations();
-  }
-
-  @override
-  Future<void> sendMessage(String userId, String content) async {
-    final String conversationId = _requireConversationId(userId);
-    await _apiClient.post(
-      '/chat/conversations/$conversationId/messages',
-      body: <String, dynamic>{'messageType': 'TEXT', 'content': content},
-    );
-    await loadMessages(userId);
-    await loadConversations();
   }
 
   DateTime? _parseDateTime(dynamic rawValue) {
@@ -133,7 +155,7 @@ class ChatApiRepository implements ChatRepository {
   String _requireConversationId(String userId) {
     final String? conversationId = _conversationIdsByUserId[userId];
     if (conversationId == null) {
-      throw ApiException('Conversation not found');
+      throw ApiException('会话未找到');
     }
     return conversationId;
   }

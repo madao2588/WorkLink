@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/shared/models/user_model.dart';
+import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/features/contacts/presentation/providers/contacts_provider.dart';
 
 class ContactScreen extends StatefulWidget {
@@ -23,7 +27,11 @@ class _ContactScreenState extends State<ContactScreen> {
       if (!mounted) {
         return;
       }
-      context.read<ContactsProvider>().loadContacts();
+      final ContactsProvider contactsProvider = context.read<ContactsProvider>();
+      // 登录/会话恢复时已由 provider 侧触发首刷；此处只在为空时兜底刷新。
+      if (contactsProvider.contacts.isEmpty && !contactsProvider.isLoading) {
+        unawaited(contactsProvider.loadContacts());
+      }
     });
     _searchController.addListener(() {
       setState(() {
@@ -41,6 +49,7 @@ class _ContactScreenState extends State<ContactScreen> {
   @override
   Widget build(BuildContext context) {
     final ContactsProvider contactsProvider = context.watch<ContactsProvider>();
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final List<UserModel> allUsers = contactsProvider.contacts;
     final List<UserModel> filteredUsers = _filterUsers(allUsers);
     final List<UserModel> onlineUsers =
@@ -71,10 +80,10 @@ class _ContactScreenState extends State<ContactScreen> {
                     _buildOnlineSection(onlineUsers),
                     const SizedBox(height: 24),
                     _buildSectionTitle(
-                      title: 'Directory',
+                      title: l10n.contactsDirectoryTitle,
                       subtitle: _keyword.isEmpty
-                          ? 'Browse colleagues by department and online status'
-                          : 'Results are filtered by name and department',
+                          ? l10n.contactsDirectorySubtitleDefault
+                          : l10n.contactsDirectorySubtitleFiltered,
                     ),
                     const SizedBox(height: 14),
                     if (groupedUsers.isEmpty)
@@ -111,82 +120,29 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget _buildHeader(int onlineCount) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: <Color>[Color(0xFF153DBD), Color(0xFF2C71F7)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    return AppHeroCard(
+      title: l10n.contactsTitle,
+      subtitle: l10n.contactsSubtitle,
+      badgeText: l10n.contactsHeaderOnlineCount(onlineCount),
+      leading: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(26),
+          borderRadius: BorderRadius.circular(16),
         ),
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: AppColors.brandBlue.withAlpha(30),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(26),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(
-                  Icons.groups_rounded,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(24),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  '$onlineCount online',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 22),
-          const Text(
-            'Contacts',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Now powered by the backend directory service and kept in sync with online status.',
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.6,
-              color: Colors.white.withAlpha(220),
-            ),
-          ),
-        ],
+        child: const Icon(
+          Icons.groups_rounded,
+          color: Colors.white,
+          size: 24,
+        ),
       ),
     );
   }
 
   Widget _buildSearchBox() {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -202,7 +158,7 @@ class _ContactScreenState extends State<ContactScreen> {
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
-          hintText: 'Search people or departments',
+          hintText: l10n.contactsSearchHint,
           prefixIcon: const Icon(Icons.search_rounded),
           suffixIcon: _keyword.isEmpty
               ? null
@@ -231,16 +187,17 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget _buildOnlineSection(List<UserModel> onlineUsers) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _buildSectionTitle(
-          title: 'Online now',
-          subtitle: 'Good candidates for quick collaboration',
+          title: l10n.contactsOnlineNowTitle,
+          subtitle: l10n.contactsOnlineNowSubtitle,
         ),
         const SizedBox(height: 14),
         if (onlineUsers.isEmpty)
-          _buildMessageCard('No online contacts matched the current search')
+          _buildMessageCard(l10n.contactsNoOnlineMatched)
         else
           SizedBox(
             height: 92,
@@ -285,6 +242,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget _buildDepartmentSection(MapEntry<String, List<UserModel>> entry) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Column(
@@ -313,7 +271,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${entry.value.length} people',
+                  l10n.contactsPeopleCount(entry.value.length),
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
@@ -349,6 +307,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget _buildEmptyState() {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
       decoration: BoxDecoration(
@@ -356,25 +315,25 @@ class _ContactScreenState extends State<ContactScreen> {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.border),
       ),
-      child: const Column(
+      child: Column(
         children: <Widget>[
           Icon(
             Icons.manage_search_rounded,
             size: 40,
             color: AppColors.textHint,
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
-            'No contacts matched your search',
-            style: TextStyle(
+            l10n.contactsNoContactsMatched,
+            style: const TextStyle(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
-            'Try another keyword or clear the filter',
-            style: TextStyle(color: AppColors.textSecondary),
+            l10n.contactsTryAnotherKeyword,
+            style: const TextStyle(color: AppColors.textSecondary),
           ),
         ],
       ),
@@ -476,6 +435,7 @@ class _ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -534,7 +494,7 @@ class _ContactCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
-                        user.isOnline ? 'Online' : 'Offline',
+                        user.isOnline ? l10n.contactsOnline : l10n.contactsOffline,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,

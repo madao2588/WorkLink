@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/router/app_router.dart';
+import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/chat/domain/models/conversation_summary.dart';
 import 'package:my_first_app/features/chat/presentation/providers/chat_provider.dart';
@@ -27,7 +30,11 @@ class _MessageListScreenState extends State<MessageListScreen> {
       if (!mounted) {
         return;
       }
-      context.read<ChatProvider>().refresh();
+      final ChatProvider chatProvider = context.read<ChatProvider>();
+      // 登录/会话恢复时已由 provider 侧触发首刷；此处只在为空时兜底刷新。
+      if (chatProvider.conversationSummaries.isEmpty && !chatProvider.isLoading) {
+        unawaited(chatProvider.refresh());
+      }
     });
     _searchController.addListener(() {
       setState(() {
@@ -144,96 +151,40 @@ class _MessageListScreenState extends State<MessageListScreen> {
     required int unreadConversations,
     required int onlineCount,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF103FC8), Color(0xFF2D77F8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return AppHeroCard(
+      title: '让会话更清晰',
+      subtitle: '把未读消息、在线同事和最近会话集中到一个更容易扫读的入口里。',
+      badgeText: '消息中心',
+      leading: Container(
+        width: 46,
+        height: 46,
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(24),
+          borderRadius: BorderRadius.circular(16),
         ),
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.brandBlue.withAlpha(30),
-            blurRadius: 26,
-            offset: const Offset(0, 14),
-          ),
-        ],
+        child: const Icon(Icons.forum_rounded, color: Colors.white),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(24),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(Icons.forum_rounded, color: Colors.white),
-              ),
-              const Spacer(),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(20),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: const Text(
-                  '消息中心',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 22),
-          const Text(
-            '让会话更清晰',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
+          Expanded(
+            child: _HeroMetric(
+              label: '未读会话',
+              value: '$unreadConversations',
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            '把未读消息、在线同事和最近会话集中到一个更容易扫读的入口里。',
-            style: TextStyle(
-              color: Colors.white.withAlpha(220),
-              height: 1.6,
+          const SizedBox(width: 10),
+          Expanded(
+            child: _HeroMetric(
+              label: '在线同事',
+              value: '$onlineCount',
             ),
           ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _HeroMetric(
-                  label: '未读会话',
-                  value: '$unreadConversations',
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _HeroMetric(
-                  label: '在线同事',
-                  value: '$onlineCount',
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _HeroMetric(
-                  label: '总消息',
-                  value: '$totalMessages',
-                ),
-              ),
-            ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: _HeroMetric(
+              label: '未读消息',
+              value: '$totalMessages',
+            ),
           ),
         ],
       ),
@@ -478,13 +429,6 @@ class _MessageListScreenState extends State<MessageListScreen> {
     context.pushNamed(
       AppRoutes.chatDetail,
       pathParameters: {'userId': summary.userId},
-      extra: ChatRouteArgs(
-        userId: summary.userId,
-        name: summary.name,
-        avatar: summary.avatar,
-        isOnline: summary.isOnline,
-        department: summary.department,
-      ),
     );
   }
 }

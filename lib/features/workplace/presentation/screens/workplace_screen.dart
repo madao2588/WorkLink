@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/router/app_router.dart';
+import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/approval/presentation/providers/approval_provider.dart';
 import 'package:my_first_app/features/attendance/presentation/providers/attendance_provider.dart';
@@ -46,9 +47,9 @@ class WorkplaceScreen extends StatelessWidget {
         tint: AppColors.info,
       ),
       _WorkMetric(
-        label: '消息总数',
+        label: '未读消息',
         value: '${chat.totalMessageCount}',
-        hint: '$onlineCount 位同事在线',
+        hint: '$onlineCount 位同事在线 · 优先处理未读消息',
         icon: Icons.mark_chat_unread_outlined,
         tint: AppColors.success,
       ),
@@ -179,134 +180,80 @@ class WorkplaceScreen extends StatelessWidget {
     required String greeting,
     required AttendanceProvider attendance,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: AppColors.heroGradient,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.brandBlue.withAlpha(35),
-            blurRadius: 30,
-            offset: const Offset(0, 16),
+    return AppHeroCard(
+      title: userName,
+      subtitle: '$dateLabel · 今天也把重点工作推进一点',
+      badgeText: greeting,
+      trailing: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(34),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withAlpha(45)),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          userName.characters.first.toUpperCase(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
           ),
-        ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      greeting,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withAlpha(220),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      userName,
-                      style: const TextStyle(
-                        fontSize: 30,
-                        height: 1.1,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '$dateLabel · 今天也把重点工作推进一点',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withAlpha(220),
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(26),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withAlpha(32)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(34),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withAlpha(45)),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  userName.characters.first.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+              child: Icon(
+                attendance.hasCheckedIn
+                    ? Icons.verified_rounded
+                    : Icons.access_time_filled_rounded,
+                color:
+                    attendance.hasCheckedIn ? AppColors.success : AppColors.warning,
               ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: Colors.white.withAlpha(26),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withAlpha(32)),
             ),
-            child: Row(
-              children: [
-                Container(
-                  width: 46,
-                  height: 46,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    attendance.hasCheckedIn ? '今日已完成打卡' : '等待打卡确认',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  child: Icon(
+                  const SizedBox(height: 6),
+                  Text(
                     attendance.hasCheckedIn
-                        ? Icons.verified_rounded
-                        : Icons.access_time_filled_rounded,
-                    color: attendance.hasCheckedIn
-                        ? AppColors.success
-                        : AppColors.warning,
+                        ? '记录时间：${attendance.time}'
+                        : '建议在开始工作后尽快完成打卡',
+                    style: TextStyle(
+                      color: Colors.white.withAlpha(210),
+                      height: 1.45,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        attendance.hasCheckedIn ? '今日已完成打卡' : '等待打卡确认',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        attendance.hasCheckedIn
-                            ? '记录时间：${attendance.time}'
-                            : '建议在开始工作后尽快完成打卡',
-                        style: TextStyle(
-                          color: Colors.white.withAlpha(210),
-                          height: 1.45,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -350,7 +297,7 @@ class WorkplaceScreen extends StatelessWidget {
   }
 
   String _formatCheckInTime(String value) {
-    if (value == '未打卡' || value == 'Not checked in') {
+    if (value == '未打卡') {
       return '--:--';
     }
 

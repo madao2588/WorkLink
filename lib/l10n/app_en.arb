@@ -1,0 +1,43 @@
+{
+  "@@locale": "en",
+  "loginPleaseEnterAccountAndPassword": "Please enter account and password",
+  "loginFailed": "Login failed",
+  "loginDemoAccount": "Demo account: zhangsan / 123456",
+  "loginHeroBrand": "WORKLINK",
+  "loginHeroTitle": "Connected Team Workflow",
+  "loginHeroSubtitle": "Sign in to sync messages, approvals, attendance, contacts, and your workspace dashboard.",
+  "loginTitleWelcomeBack": "Welcome back",
+  "loginSubtitleDemoAccount": "Use the backend demo account to enter the connected workspace.",
+  "loginLabelAccount": "Account",
+  "loginLabelPassword": "Password",
+  "loginConnecting": "Connecting...",
+  "loginEnterWorkLink": "Enter WorkLink",
+
+  "contactsHeaderOnlineCount": "{count} online",
+  "contactsTitle": "Contacts",
+  "contactsSubtitle": "Now powered by the backend directory service and kept in sync with online status.",
+  "contactsDirectoryTitle": "Directory",
+  "contactsDirectorySubtitleDefault": "Browse colleagues by department and online status",
+  "contactsDirectorySubtitleFiltered": "Results are filtered by name and department",
+  "contactsSearchHint": "Search people or departments",
+  "contactsOnlineNowTitle": "Online now",
+  "contactsOnlineNowSubtitle": "Good candidates for quick collaboration",
+  "contactsNoOnlineMatched": "No online contacts matched the current search",
+  "contactsPeopleCount": "{count} people",
+  "contactsNoContactsMatched": "No contacts matched your search",
+  "contactsTryAnotherKeyword": "Try another keyword or clear the filter",
+  "contactsOnline": "Online",
+  "contactsOffline": "Offline",
+
+  "@contactsHeaderOnlineCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@contactsPeopleCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
+}
+

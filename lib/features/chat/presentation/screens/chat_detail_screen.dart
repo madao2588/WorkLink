@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/chat/domain/models/chat_message_model.dart';
+import 'package:my_first_app/features/chat/domain/models/conversation_summary.dart';
 import 'package:my_first_app/features/chat/presentation/providers/chat_provider.dart';
 import 'package:my_first_app/features/chat/presentation/widgets/chat_bubble.dart';
 
@@ -11,17 +12,9 @@ class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen({
     super.key,
     required this.userId,
-    required this.name,
-    required this.avatar,
-    required this.isOnline,
-    required this.department,
   });
 
   final String userId;
-  final String name;
-  final String avatar;
-  final bool isOnline;
-  final String department;
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -63,16 +56,25 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   Widget build(BuildContext context) {
     final ChatProvider provider = context.watch<ChatProvider>();
     final List<ChatMessageModel> messages = provider.getMessages(widget.userId);
+    final ConversationSummary? summary =
+        provider.conversationSummaryFor(widget.userId);
+
+    final bool isOnline = summary?.isOnline ?? false;
+    final String peerName = summary?.name ?? '同事';
+    final String peerDepartment = summary?.department ?? '';
+    final String peerAvatar = summary?.avatar ?? '?';
 
     return Scaffold(
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(widget.name),
+            Text(peerName),
             const SizedBox(height: 2),
             Text(
-              widget.isOnline ? '在线 · ${widget.department}' : widget.department,
+              peerDepartment.isEmpty
+                  ? (isOnline ? '在线' : '')
+                  : (isOnline ? '在线 · $peerDepartment' : peerDepartment),
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.textSecondary,
@@ -84,7 +86,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       ),
       body: Column(
         children: <Widget>[
-          _buildTopStatus(provider.errorMessage),
+          _buildTopStatus(
+            provider.errorMessage,
+            isOnline: isOnline,
+            peerName: peerName,
+            peerDepartment: peerDepartment,
+          ),
           Expanded(
             child: Container(
               color: const Color(0xFFF6F8FC),
@@ -93,7 +100,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   : ListView(
                       controller: _scrollController,
                       padding: const EdgeInsets.only(top: 12, bottom: 16),
-                      children: _buildTimeline(messages),
+                      children: _buildTimeline(messages, peerAvatar: peerAvatar),
                     ),
             ),
           ),
@@ -105,7 +112,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  Widget _buildTopStatus(String? errorMessage) {
+  Widget _buildTopStatus(
+    String? errorMessage, {
+    required bool isOnline,
+    required String peerName,
+    required String peerDepartment,
+  }) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       padding: const EdgeInsets.all(14),
@@ -120,14 +132,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: widget.isOnline
+              color: isOnline
                   ? AppColors.success.withAlpha(14)
                   : AppColors.textHint.withAlpha(16),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(
-              widget.isOnline ? Icons.wifi_tethering : Icons.schedule_rounded,
-              color: widget.isOnline
+              isOnline ? Icons.wifi_tethering : Icons.schedule_rounded,
+              color: isOnline
                   ? AppColors.success
                   : AppColors.textSecondary,
             ),
@@ -136,9 +148,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           Expanded(
             child: Text(
               errorMessage ??
-                  (widget.isOnline
-                      ? '${widget.name} 当前在线，适合快速推进沟通'
-                      : '${widget.name} 当前离线，消息会在对方上线后看到'),
+                  (isOnline
+                      ? '$peerName 当前在线，适合快速推进沟通'
+                      : peerDepartment.isNotEmpty
+                          ? '$peerName 当前离线，消息会在对方上线后看到'
+                          : '$peerName 当前离线'),
               style: const TextStyle(
                 color: AppColors.textSecondary,
                 height: 1.45,
@@ -151,7 +165,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  List<Widget> _buildTimeline(List<ChatMessageModel> messages) {
+  List<Widget> _buildTimeline(
+    List<ChatMessageModel> messages, {
+    required String peerAvatar,
+  }) {
     final List<Widget> items = <Widget>[];
     DateTime? previousDay;
 
@@ -169,7 +186,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       items.add(
         ChatBubble(
           message: message,
-          peerAvatar: widget.avatar,
+          peerAvatar: peerAvatar,
         ),
       );
     }
@@ -181,12 +198,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     final DateTime now = DateTime.now();
     String label;
     if (DateUtils.isSameDay(now, time)) {
-      label = 'Today';
+      label = '今天';
     } else if (DateUtils.isSameDay(
       now.subtract(const Duration(days: 1)),
       time,
     )) {
-      label = 'Yesterday';
+      label = '昨天';
     } else {
       label = DateFormat('MM/dd').format(time);
     }
@@ -255,7 +272,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             IconButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Attachment support will come next')),
+                  const SnackBar(content: Text('附件功能即将上线')),
                 );
               },
               style: IconButton.styleFrom(
@@ -278,7 +295,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   });
                 },
                 decoration: const InputDecoration(
-                  hintText: 'Type a message...',
+                  hintText: '输入消息...',
                   isDense: true,
                 ),
               ),
@@ -290,7 +307,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 minimumSize: const Size(68, 52),
                 padding: const EdgeInsets.symmetric(horizontal: 18),
               ),
-              child: const Text('Send'),
+              child: const Text('发送'),
             ),
           ],
         ),

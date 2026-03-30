@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:my_first_app/app/main_shell.dart';
@@ -17,6 +18,7 @@ import 'package:my_first_app/features/workplace/presentation/screens/workplace_s
 
 class AppRoutes {
   static const String login = 'login';
+  static const String loading = 'loading';
   static const String messages = 'messages';
   static const String contacts = 'contacts';
   static const String workplace = 'workplace';
@@ -30,22 +32,6 @@ class AppRoutes {
   static const String chatDetail = 'chatDetail';
 }
 
-class ChatRouteArgs {
-  const ChatRouteArgs({
-    required this.userId,
-    required this.name,
-    required this.avatar,
-    required this.isOnline,
-    required this.department,
-  });
-
-  final String userId;
-  final String name;
-  final String avatar;
-  final bool isOnline;
-  final String department;
-}
-
 class AppRouter {
   static GoRouter createRouter(UserProvider userProvider) {
     return GoRouter(
@@ -54,6 +40,17 @@ class AppRouter {
       redirect: (context, state) {
         final bool loggedIn = userProvider.currentUser != null;
         final bool goingToLogin = state.matchedLocation == '/login';
+        final bool goingToLoading = state.matchedLocation == '/loading';
+
+        // Avoid redirect flicker while we restore/refresh auth tokens.
+        if (userProvider.isLoading) {
+          return goingToLoading ? null : '/loading';
+        }
+
+        // Auth restored/finished: leave the loading page.
+        if (goingToLoading) {
+          return loggedIn ? '/messages' : '/login';
+        }
 
         if (!loggedIn && !goingToLogin) {
           return '/login';
@@ -64,6 +61,17 @@ class AppRouter {
         return null;
       },
       routes: [
+        GoRoute(
+          path: '/loading',
+          name: AppRoutes.loading,
+          builder: (context, state) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        ),
         GoRoute(
           path: '/login',
           name: AppRoutes.login,
@@ -146,13 +154,9 @@ class AppRouter {
           path: '/chat/:userId',
           name: AppRoutes.chatDetail,
           builder: (context, state) {
-            final ChatRouteArgs args = state.extra! as ChatRouteArgs;
+            final String userId = state.pathParameters['userId']!;
             return ChatDetailScreen(
-              userId: args.userId,
-              name: args.name,
-              avatar: args.avatar,
-              isOnline: args.isOnline,
-              department: args.department,
+              userId: userId,
             );
           },
         ),

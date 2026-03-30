@@ -1,3 +1,4 @@
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ import 'package:my_first_app/features/profile/presentation/providers/profile_pro
 
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class WorkLinkBootstrap extends StatelessWidget {
   const WorkLinkBootstrap({super.key, required this.authStorage});
@@ -157,6 +159,26 @@ class WorkLinkApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'WorkLink',
       theme: AppTheme.lightTheme,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      localeResolutionCallback: (
+        Locale? locale,
+        Iterable<Locale> supportedLocales,
+      ) {
+        final String? languageCode = locale?.languageCode;
+        if (languageCode == 'zh') {
+          return const Locale('zh');
+        }
+        if (languageCode == 'en') {
+          return const Locale('en');
+        }
+        return supportedLocales.first;
+      },
       routerConfig: AppRouter.createRouter(userProvider),
     );
   }

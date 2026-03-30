@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/theme/app_theme.dart';
-import 'package:my_first_app/features/approval/presentation/providers/approval_provider.dart';
-import 'package:my_first_app/features/attendance/presentation/providers/attendance_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/features/auth/presentation/providers/user_provider.dart';
-import 'package:my_first_app/features/chat/presentation/providers/chat_provider.dart';
-import 'package:my_first_app/features/contacts/presentation/providers/contacts_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,7 +32,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final String password = _passwordController.text.trim();
     if (account.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter account and password')),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.loginPleaseEnterAccountAndPassword,
+          ),
+        ),
       );
       return;
     }
@@ -52,22 +53,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(userProvider.errorMessage ?? 'Login failed')),
+        SnackBar(
+          content: Text(
+            userProvider.errorMessage ??
+                AppLocalizations.of(context)!.loginFailed,
+          ),
+        ),
       );
       return;
     }
-
-    await Future.wait(<Future<void>>[
-      context.read<ChatProvider>().refresh(),
-      context.read<ApprovalProvider>().loadApprovals(),
-      context.read<AttendanceProvider>().loadToday(),
-      context.read<ContactsProvider>().loadContacts(),
-    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = context.watch<UserProvider>();
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: LayoutBuilder(
@@ -118,14 +118,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             const SizedBox(height: 16),
-                            _buildHeroHeader(),
+                            _buildHeroHeader(l10n),
                             const SizedBox(height: 28),
                             _buildLoginCard(userProvider),
                             const Spacer(),
                             const SizedBox(height: 20),
                             Center(
                               child: Text(
-                                'Demo account: zhangsan / 123456',
+                                l10n.loginDemoAccount,
                                 style: TextStyle(
                                   color: AppColors.textSecondary.withAlpha(170),
                                   fontSize: 13,
@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildHeroHeader() {
+  Widget _buildHeroHeader(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -158,13 +158,13 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: Colors.white.withAlpha(45)),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Icon(Icons.hub_outlined, color: Colors.white, size: 18),
               SizedBox(width: 8),
               Text(
-                'WORKLINK',
+                l10n.loginHeroBrand,
                 style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 1.1,
@@ -175,8 +175,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 28),
-        const Text(
-          'Connected Team Workflow',
+        Text(
+          l10n.loginHeroTitle,
           style: TextStyle(
             fontSize: 30,
             height: 1.2,
@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 12),
         Text(
-          'Sign in to sync messages, approvals, attendance, contacts, and your workspace dashboard.',
+          l10n.loginHeroSubtitle,
           style: TextStyle(
             fontSize: 15,
             height: 1.6,
@@ -198,6 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginCard(UserProvider userProvider) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -215,8 +216,8 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'Welcome back',
+          Text(
+            l10n.loginTitleWelcomeBack,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w800,
@@ -224,8 +225,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Use the backend demo account to enter the connected workspace.',
+          Text(
+            l10n.loginSubtitleDemoAccount,
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
@@ -236,8 +237,8 @@ class _LoginScreenState extends State<LoginScreen> {
           TextField(
             controller: _accountController,
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
-              labelText: 'Account',
+            decoration: InputDecoration(
+              labelText: l10n.loginLabelAccount,
               hintText: 'zhangsan',
               prefixIcon: Icon(Icons.person_outline_rounded),
             ),
@@ -248,8 +249,8 @@ class _LoginScreenState extends State<LoginScreen> {
             obscureText: true,
             textInputAction: TextInputAction.done,
             onSubmitted: (_) => _handleLogin(),
-            decoration: const InputDecoration(
-              labelText: 'Password',
+            decoration: InputDecoration(
+              labelText: l10n.loginLabelPassword,
               hintText: '123456',
               prefixIcon: Icon(Icons.lock_outline_rounded),
             ),
@@ -270,7 +271,9 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ElevatedButton(
               onPressed: userProvider.isLoading ? null : _handleLogin,
               child: Text(
-                userProvider.isLoading ? 'Connecting...' : 'Enter WorkLink',
+                userProvider.isLoading
+                    ? l10n.loginConnecting
+                    : l10n.loginEnterWorkLink,
               ),
             ),
           ),

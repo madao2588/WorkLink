@@ -37,28 +37,43 @@ class UserProvider with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final String? accessToken = await _authStorage.readAccessToken();
-    final String? refreshToken = await _authStorage.readRefreshToken();
+    try {
+      final String? accessToken = await _authStorage.readAccessToken();
+      final String? refreshToken = await _authStorage.readRefreshToken();
 
-    if (accessToken != null && refreshToken != null) {
-      _accessToken = accessToken;
-      _refreshToken = refreshToken;
-      notifyListeners();
+      if (accessToken != null && refreshToken != null) {
+        _accessToken = accessToken;
+        _refreshToken = refreshToken;
+        notifyListeners();
 
-      try {
-        _currentUser = await _authRepository.getCurrentUser();
-      } on ApiException {
-        final bool refreshed = await _refreshSession();
-        if (refreshed) {
+        try {
           _currentUser = await _authRepository.getCurrentUser();
-        } else {
-          await logout();
+        } on ApiException {
+          final bool refreshed = await _refreshSession();
+          if (refreshed) {
+            _currentUser = await _authRepository.getCurrentUser();
+          } else {
+            await logout();
+          }
         }
       }
+    } catch (e) {
+      // Web refresh 过程中，secure storage 读写可能会抛异常。
+      // 为避免白屏，出错后降级到未登录状态。
+      _currentUser = null;
+      _accessToken = null;
+      _refreshToken = null;
+      _errorMessage = e.toString();
+      try {
+        await _authStorage.clearTokens();
+      } catch (_) {
+        // ignore
+      }
+      notifyListeners();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future<bool> _refreshSession() async {
