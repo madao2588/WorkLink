@@ -1,31 +1,30 @@
 # WorkLink Backend
 
-这是给当前 Flutter 项目配套的一套后端服务，目标是直接替换前端现有的 mock 数据，进入真实接口联调阶段。
+这里是 WorkLink 的 FastAPI 后端，负责为 Flutter 前端提供真实接口，逐步替换前端内置的 mock 数据。
 
 ## 技术栈
 
 - FastAPI
 - SQLAlchemy
-- DuckDB 开发数据库
-- PostgreSQL 正式数据库
-- JWT Access Token
-- Refresh Token
+- DuckDB 本地开发数据库
+- PostgreSQL 生产数据库
+- JWT Access Token / Refresh Token
 - WebSocket
 
 ## 已实现模块
 
-- Auth：登录、刷新令牌、登出、当前用户、设备记录
-- Org：通讯录、部门树、用户详情
-- Chat：会话列表、消息历史、发送消息、已读、会话偏好、WebSocket
-- Approval：审批列表、详情、发起、通过、拒绝、撤回、汇总
-- Attendance：今日考勤、打卡、历史
-- Profile：个人概览、工资条、勋章、账号安全、设置、反馈
-- Workplace：工作台聚合数据
-- Notifications：通知列表与已读
+- `Auth`：登录、刷新令牌、登出、当前用户、设备记录
+- `Org`：通讯录、部门树、用户详情
+- `Chat`：会话列表、消息历史、发送消息、已读、会话偏好、WebSocket
+- `Approval`：审批列表、详情、发起、通过、拒绝、撤回、汇总
+- `Attendance`：今日考勤、打卡、历史
+- `Profile`：个人概览、工资条、勋章、账号安全、设置、反馈
+- `Workplace`：工作台聚合数据
+- `Notifications`：通知列表与已读
 
 ## 本地开发
 
-1. 创建并激活虚拟环境
+### 1. 创建并激活虚拟环境
 
 ```powershell
 cd backend
@@ -34,25 +33,25 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-2. 使用默认开发库启动
+### 2. 使用默认开发数据库启动
 
 ```powershell
 Copy-Item .env.example .env
 uvicorn app.main:app --reload
 ```
 
-默认开发数据库是 `backend/worklink.duckdb`，启动时会自动建表并注入种子数据。
+默认开发数据库是 `backend/worklink.duckdb`。应用启动时会自动建表、执行轻量迁移，并注入种子数据。
 
-## 配置 PostgreSQL
+## PostgreSQL 模式
 
-### 一键启动数据库
+### 启动本地 PostgreSQL
 
 ```powershell
 cd backend
 docker compose up -d
 ```
 
-### 切换后端到 PostgreSQL
+### 切换到 PostgreSQL 配置
 
 ```powershell
 Copy-Item .env.postgres.example .env
@@ -61,7 +60,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-默认 PostgreSQL 配置如下：
+默认 PostgreSQL 连接信息：
 
 - Host：`127.0.0.1`
 - Port：`5432`
@@ -69,17 +68,33 @@ uvicorn app.main:app --reload
 - Username：`worklink`
 - Password：`worklink123`
 
-应用启动时会自动建表并注入种子数据，所以不需要额外执行迁移脚本。
+## 与 Flutter 前端联调
+
+后端默认地址：
+
+- API：`http://127.0.0.1:8000/api/v1`
+- Swagger UI：`http://127.0.0.1:8000/docs`
+- OpenAPI：`http://127.0.0.1:8000/openapi.json`
+
+前端现在支持通过 `WORKLINK_API_BASE_URL` 覆盖接口地址，例如：
+
+```powershell
+flutter run --dart-define=WORKLINK_API_BASE_URL=http://127.0.0.1:8000/api/v1
+```
+
+如果是 Android 模拟器，本地联调通常使用 `http://10.0.2.2:8000/api/v1`。
 
 ## 默认测试账号
 
 - 登录名：`zhangsan`
 - 密码：`123456`
 
-## 接口文档
+## 测试
 
-- Swagger UI：`http://127.0.0.1:8000/docs`
-- OpenAPI：`http://127.0.0.1:8000/openapi.json`
+```powershell
+cd backend
+.\.venv\Scripts\python.exe -m pytest
+```
 
 ## 关键环境变量
 
@@ -108,7 +123,7 @@ backend/
   requirements.txt
 ```
 
-## 联调建议顺序
+## 建议联调顺序
 
 1. `/api/v1/auth/login`
 2. `/api/v1/auth/me`
