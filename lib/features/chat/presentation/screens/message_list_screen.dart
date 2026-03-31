@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/router/app_router.dart';
-import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
+import 'package:my_first_app/app/shared/widgets/app_dashboard_hero.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/chat/domain/models/conversation_summary.dart';
 import 'package:my_first_app/features/chat/presentation/providers/chat_provider.dart';
@@ -32,7 +32,8 @@ class _MessageListScreenState extends State<MessageListScreen> {
       }
       final ChatProvider chatProvider = context.read<ChatProvider>();
       // 登录/会话恢复时已由 provider 侧触发首刷；此处只在为空时兜底刷新。
-      if (chatProvider.conversationSummaries.isEmpty && !chatProvider.isLoading) {
+      if (chatProvider.conversationSummaries.isEmpty &&
+          !chatProvider.isLoading) {
         unawaited(chatProvider.refresh());
       }
     });
@@ -151,43 +152,16 @@ class _MessageListScreenState extends State<MessageListScreen> {
     required int unreadConversations,
     required int onlineCount,
   }) {
-    return AppHeroCard(
+    return AppDashboardHero(
       title: '让会话更清晰',
       subtitle: '把未读消息、在线同事和最近会话集中到一个更容易扫读的入口里。',
       badgeText: '消息中心',
-      leading: Container(
-        width: 46,
-        height: 46,
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(24),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Icon(Icons.forum_rounded, color: Colors.white),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _HeroMetric(
-              label: '未读会话',
-              value: '$unreadConversations',
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _HeroMetric(
-              label: '在线同事',
-              value: '$onlineCount',
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _HeroMetric(
-              label: '未读消息',
-              value: '$totalMessages',
-            ),
-          ),
-        ],
-      ),
+      icon: Icons.forum_rounded,
+      stats: <AppDashboardHeroStat>[
+        AppDashboardHeroStat(label: '未读会话', value: '$unreadConversations'),
+        AppDashboardHeroStat(label: '在线同事', value: '$onlineCount'),
+        AppDashboardHeroStat(label: '未读消息', value: '$totalMessages'),
+      ],
     );
   }
 
@@ -312,10 +286,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
               color: AppColors.brandBlue.withAlpha(14),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(
-              Icons.inbox_outlined,
-              color: AppColors.brandBlue,
-            ),
+            child: const Icon(Icons.inbox_outlined, color: AppColors.brandBlue),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -343,10 +314,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
     );
   }
 
-  Widget _buildSectionTitle({
-    required String title,
-    required String subtitle,
-  }) {
+  Widget _buildSectionTitle({required String title, required String subtitle}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -361,10 +329,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.textSecondary,
-          ),
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
         ),
       ],
     );
@@ -433,50 +398,8 @@ class _MessageListScreenState extends State<MessageListScreen> {
   }
 }
 
-class _HeroMetric extends StatelessWidget {
-  const _HeroMetric({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white.withAlpha(20),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withAlpha(220),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _OnlineCollaboratorCard extends StatelessWidget {
-  const _OnlineCollaboratorCard({
-    required this.summary,
-    required this.onTap,
-  });
+  const _OnlineCollaboratorCard({required this.summary, required this.onTap});
 
   final ConversationSummary summary;
   final VoidCallback onTap;
@@ -633,10 +556,7 @@ class _OnlineCollaboratorCard extends StatelessWidget {
 }
 
 class _ConversationCard extends StatelessWidget {
-  const _ConversationCard({
-    required this.summary,
-    required this.onTap,
-  });
+  const _ConversationCard({required this.summary, required this.onTap});
 
   final ConversationSummary summary;
   final VoidCallback onTap;
@@ -767,9 +687,7 @@ class _ConversationCard extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            summary.isOnline
-                                ? summary.department
-                                : '最近保持同步',
+                            summary.isOnline ? summary.department : '最近保持同步',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -791,8 +709,9 @@ class _ConversationCard extends StatelessWidget {
                         color: hasUnread
                             ? AppColors.textPrimary
                             : AppColors.textSecondary,
-                        fontWeight:
-                            hasUnread ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: hasUnread
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                       ),
                     ),
                   ],

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/router/app_router.dart';
-import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
+import 'package:my_first_app/app/shared/widgets/app_dashboard_hero.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/approval/presentation/providers/approval_provider.dart';
 import 'package:my_first_app/features/attendance/presentation/providers/attendance_provider.dart';
@@ -115,6 +115,8 @@ class WorkplaceScreen extends StatelessWidget {
                     dateLabel: DateFormat('MM月dd日').format(now),
                     greeting: _buildGreeting(now),
                     attendance: attendance,
+                    approval: approval,
+                    chat: chat,
                   ),
                   const SizedBox(height: 20),
                   _buildSectionTitle(
@@ -128,11 +130,11 @@ class WorkplaceScreen extends StatelessWidget {
                     itemCount: metrics.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.45,
-                    ),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 1.45,
+                        ),
                     itemBuilder: (context, index) {
                       return _MetricCard(metric: metrics[index]);
                     },
@@ -149,11 +151,11 @@ class WorkplaceScreen extends StatelessWidget {
                     itemCount: actions.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 14,
-                      crossAxisSpacing: 14,
-                      childAspectRatio: 0.95,
-                    ),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 14,
+                          crossAxisSpacing: 14,
+                          childAspectRatio: 0.95,
+                        ),
                     itemBuilder: (context, index) {
                       return _ActionCard(
                         action: actions[index],
@@ -179,89 +181,26 @@ class WorkplaceScreen extends StatelessWidget {
     required String dateLabel,
     required String greeting,
     required AttendanceProvider attendance,
+    required ApprovalProvider approval,
+    required ChatProvider chat,
   }) {
-    return AppHeroCard(
+    return AppDashboardHero(
       title: userName,
       subtitle: '$dateLabel · 今天也把重点工作推进一点',
       badgeText: greeting,
-      trailing: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(34),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withAlpha(45)),
+      icon: Icons.dashboard_customize_rounded,
+      stats: <AppDashboardHeroStat>[
+        AppDashboardHeroStat(
+          label: '今日状态',
+          value: attendance.hasCheckedIn ? '已打卡' : '待打卡',
         ),
-        alignment: Alignment.center,
-        child: Text(
-          userName.characters.first.toUpperCase(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(26),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withAlpha(32)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 46,
-              height: 46,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                attendance.hasCheckedIn
-                    ? Icons.verified_rounded
-                    : Icons.access_time_filled_rounded,
-                color:
-                    attendance.hasCheckedIn ? AppColors.success : AppColors.warning,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    attendance.hasCheckedIn ? '今日已完成打卡' : '等待打卡确认',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    attendance.hasCheckedIn
-                        ? '记录时间：${attendance.time}'
-                        : '建议在开始工作后尽快完成打卡',
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(210),
-                      height: 1.45,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+        AppDashboardHeroStat(label: '待审批', value: '${approval.pendingCount}'),
+        AppDashboardHeroStat(label: '未读消息', value: '${chat.totalMessageCount}'),
+      ],
     );
   }
 
-  Widget _buildSectionTitle({
-    required String title,
-    required String subtitle,
-  }) {
+  Widget _buildSectionTitle({required String title, required String subtitle}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -276,10 +215,7 @@ class WorkplaceScreen extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.textSecondary,
-          ),
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
         ),
       ],
     );
@@ -331,14 +267,14 @@ class WorkplaceScreen extends StatelessWidget {
         context.pushNamed(AppRoutes.approval);
         return;
       case 'log':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('工作日志模块正在整理中')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('工作日志模块正在整理中')));
         return;
       case 'notice':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('企业公告模块稍后补充')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('企业公告模块稍后补充')));
         return;
     }
   }
@@ -398,10 +334,7 @@ class _MetricCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             metric.hint,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textHint,
-            ),
+            style: const TextStyle(fontSize: 12, color: AppColors.textHint),
           ),
         ],
       ),

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/router/app_router.dart';
-import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
+import 'package:my_first_app/app/shared/widgets/app_dashboard_hero.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/auth/presentation/providers/user_provider.dart';
 import 'package:my_first_app/features/profile/domain/models/profile_overview.dart';
@@ -151,42 +151,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileHero(ProfileOverview overview) {
-    return AppHeroCard(
+    return AppDashboardHero(
       title: overview.user.name,
       subtitle: overview.user.department,
       badgeText: overview.user.isOnline ? '在线办公中' : '已认证账号',
-      leading: Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(22),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withAlpha(36)),
+      icon: Icons.account_circle_rounded,
+      stats: <AppDashboardHeroStat>[
+        AppDashboardHeroStat(
+          label: '出勤状态',
+          value: _attendanceLabel(overview.attendanceStatus),
         ),
-        alignment: Alignment.center,
-        child: Text(
-          overview.user.avatar,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w800,
-          ),
+        AppDashboardHeroStat(
+          label: '待审批',
+          value: '${overview.pendingApprovalCount}',
         ),
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(20),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withAlpha(28)),
+        AppDashboardHeroStat(
+          label: '未读消息',
+          value: '${overview.unreadMessageCount}',
         ),
-        child: Text(
-          overview.hasCheckedIn
-              ? '今天已完成打卡，未读消息 ${overview.unreadMessageCount} 条，适合优先处理待审批事项。'
-              : '今天还没打卡，建议先完成出勤确认，再回到消息和审批里处理待办。',
-          style: TextStyle(height: 1.6, color: Colors.white.withAlpha(220)),
-        ),
-      ),
+      ],
     );
   }
 

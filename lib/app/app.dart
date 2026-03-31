@@ -166,19 +166,17 @@ class WorkLinkApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      localeResolutionCallback: (
-        Locale? locale,
-        Iterable<Locale> supportedLocales,
-      ) {
-        final String? languageCode = locale?.languageCode;
-        if (languageCode == 'zh') {
-          return const Locale('zh');
-        }
-        if (languageCode == 'en') {
-          return const Locale('en');
-        }
-        return supportedLocales.first;
-      },
+      localeResolutionCallback:
+          (Locale? locale, Iterable<Locale> supportedLocales) {
+            final String? languageCode = locale?.languageCode;
+            if (languageCode == 'zh') {
+              return const Locale('zh');
+            }
+            if (languageCode == 'en') {
+              return const Locale('en');
+            }
+            return supportedLocales.first;
+          },
       routerConfig: AppRouter.createRouter(userProvider),
     );
   }

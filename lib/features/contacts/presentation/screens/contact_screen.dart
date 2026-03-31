@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/shared/models/user_model.dart';
-import 'package:my_first_app/app/shared/widgets/app_hero_card.dart';
+import 'package:my_first_app/app/shared/widgets/app_dashboard_hero.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/features/contacts/presentation/providers/contacts_provider.dart';
@@ -27,7 +27,8 @@ class _ContactScreenState extends State<ContactScreen> {
       if (!mounted) {
         return;
       }
-      final ContactsProvider contactsProvider = context.read<ContactsProvider>();
+      final ContactsProvider contactsProvider = context
+          .read<ContactsProvider>();
       // 登录/会话恢复时已由 provider 侧触发首刷；此处只在为空时兜底刷新。
       if (contactsProvider.contacts.isEmpty && !contactsProvider.isLoading) {
         unawaited(contactsProvider.loadContacts());
@@ -52,10 +53,12 @@ class _ContactScreenState extends State<ContactScreen> {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     final List<UserModel> allUsers = contactsProvider.contacts;
     final List<UserModel> filteredUsers = _filterUsers(allUsers);
-    final List<UserModel> onlineUsers =
-        filteredUsers.where((UserModel user) => user.isOnline).toList();
-    final Map<String, List<UserModel>> groupedUsers =
-        _groupUsersByDepartment(filteredUsers);
+    final List<UserModel> onlineUsers = filteredUsers
+        .where((UserModel user) => user.isOnline)
+        .toList();
+    final Map<String, List<UserModel>> groupedUsers = _groupUsersByDepartment(
+      filteredUsers,
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -65,7 +68,11 @@ class _ContactScreenState extends State<ContactScreen> {
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
               sliver: SliverList.list(
                 children: <Widget>[
-                  _buildHeader(onlineUsers.length),
+                  _buildHeader(
+                    onlineUsers.length,
+                    filteredUsers.length,
+                    groupedUsers.length,
+                  ),
                   const SizedBox(height: 20),
                   _buildSearchBox(),
                   const SizedBox(height: 20),
@@ -119,25 +126,18 @@ class _ContactScreenState extends State<ContactScreen> {
     return grouped;
   }
 
-  Widget _buildHeader(int onlineCount) {
+  Widget _buildHeader(int onlineCount, int contactCount, int departmentCount) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    return AppHeroCard(
+    return AppDashboardHero(
       title: l10n.contactsTitle,
       subtitle: l10n.contactsSubtitle,
       badgeText: l10n.contactsHeaderOnlineCount(onlineCount),
-      leading: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(26),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Icon(
-          Icons.groups_rounded,
-          color: Colors.white,
-          size: 24,
-        ),
-      ),
+      icon: Icons.groups_rounded,
+      stats: <AppDashboardHeroStat>[
+        AppDashboardHeroStat(label: l10n.contactsOnline, value: '$onlineCount'),
+        AppDashboardHeroStat(label: '联系人', value: '$contactCount'),
+        AppDashboardHeroStat(label: '部门数', value: '$departmentCount'),
+      ],
     );
   }
 
@@ -214,10 +214,7 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  Widget _buildSectionTitle({
-    required String title,
-    required String subtitle,
-  }) {
+  Widget _buildSectionTitle({required String title, required String subtitle}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -232,10 +229,7 @@ class _ContactScreenState extends State<ContactScreen> {
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.textSecondary,
-          ),
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
         ),
       ],
     );
@@ -494,7 +488,9 @@ class _ContactCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
-                        user.isOnline ? l10n.contactsOnline : l10n.contactsOffline,
+                        user.isOnline
+                            ? l10n.contactsOnline
+                            : l10n.contactsOffline,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,

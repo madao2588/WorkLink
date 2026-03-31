@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     secret_key: str = DEFAULT_SECRET_KEY
     access_token_expire_minutes: int = 120
     database_url: str = "duckdb:///./worklink.duckdb"
+    serve_frontend: bool = Field(default=True, validation_alias="SERVE_FRONTEND")
+    frontend_web_root: str = Field(default="../build/web", validation_alias="FRONTEND_WEB_ROOT")
     allowed_origin_regex: str = r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
     allowed_origins: list[str] = [
         "http://localhost:3000",

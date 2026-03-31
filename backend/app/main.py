@@ -1,9 +1,11 @@
 import logging
+from pathlib import Path
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from app.api.router import api_router
 from app.core.config import get_settings
@@ -12,6 +14,8 @@ from app.core.logging import configure_logging
 from app.core.response import error_response
 
 logger = logging.getLogger(__name__)
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+RESERVED_FRONTEND_PREFIXES = ("/api", "/docs", "/redoc", "/openapi.json")
 
 
 def _map_http_error_code(status_code: int) -> str:
@@ -25,9 +29,37 @@ def _map_http_error_code(status_code: int) -> str:
     return mapping.get(status_code, f"HTTP_{status_code}")
 
 
+def _resolve_frontend_root(frontend_web_root: str) -> Path:
+    candidate = Path(frontend_web_root)
+    if not candidate.is_absolute():
+        candidate = BACKEND_ROOT / candidate
+    return candidate.resolve()
+
+
+def _is_frontend_request(path: str, api_v1_prefix: str) -> bool:
+    if path.startswith(api_v1_prefix):
+        return False
+    return not path.startswith(RESERVED_FRONTEND_PREFIXES)
+
+
+def _resolve_requested_frontend_file(frontend_root: Path, requested_path: str) -> Path | None:
+    relative_path = requested_path.lstrip("/")
+    candidate = (frontend_root / relative_path).resolve()
+    try:
+        candidate.relative_to(frontend_root)
+    except ValueError:
+        return None
+
+    if candidate.is_dir():
+        candidate = candidate / "index.html"
+
+    return candidate
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
+    frontend_root = _resolve_frontend_root(settings.frontend_web_root)
 
     app = FastAPI(title=settings.app_name, version="1.0.0", debug=settings.debug)
     app.add_middleware(
@@ -88,6 +120,33 @@ def create_app() -> FastAPI:
         )
 
     app.include_router(api_router, prefix=settings.api_v1_prefix)
+
+    if settings.serve_frontend and frontend_root.joinpath("index.html").exists():
+        @app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
+        @app.api_route("/{full_path:path}", methods=["GET", "HEAD"], include_in_schema=False)
+        async def serve_frontend(request: Request, full_path: str = ""):
+            if not _is_frontend_request(request.url.path, settings.api_v1_prefix):
+                raise HTTPException(status_code=404, detail="Not found")
+
+            requested_file = _resolve_requested_frontend_file(frontend_root, full_path)
+            if requested_file is None:
+                raise HTTPException(status_code=404, detail="Not found")
+
+            if requested_file.is_file():
+                response = FileResponse(requested_file)
+                if requested_file.name == "index.html":
+                    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                return response
+
+            if Path(full_path).suffix:
+                raise HTTPException(status_code=404, detail="Not found")
+
+            response = FileResponse(frontend_root / "index.html")
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            return response
+    elif settings.serve_frontend:
+        logger.warning("Frontend serving enabled, but index.html was not found at %s", frontend_root)
+
     return app
 
 
