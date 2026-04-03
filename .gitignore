@@ -30,6 +30,9 @@ build/linux/
 
 # Python
 backend/.venv/
+backend/build/
+backend/dist/
+backend/*.spec
 __pycache__/
 *.pyc
 *.pyo
@@ -88,6 +91,7 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+/dist/
 
 # Symbolication related
 app.*.symbols
