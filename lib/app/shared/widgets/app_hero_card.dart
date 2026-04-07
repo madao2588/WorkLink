@@ -29,13 +29,13 @@ class AppHeroCard extends StatelessWidget {
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        gradient: AppColors.heroGradient,
+        gradient: AppThemePalette.heroGradient(context),
         borderRadius: _radius,
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: AppColors.brandBlue.withAlpha(30),
-            blurRadius: 26,
-            offset: const Offset(0, 14),
+            color: AppThemePalette.heroShadow(context),
+            blurRadius: 28,
+            offset: const Offset(0, 16),
           ),
         ],
       ),

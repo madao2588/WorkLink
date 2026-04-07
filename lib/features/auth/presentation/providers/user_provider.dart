@@ -47,11 +47,25 @@ class UserProvider with ChangeNotifier {
         notifyListeners();
 
         try {
-          _currentUser = await _authRepository.getCurrentUser();
+          final UserModel restoredUser = await _authRepository.getCurrentUser();
+          _currentUser = restoredUser.copyWith(
+            loginId: restoredUser.loginId ?? _currentUser?.loginId,
+            role: restoredUser.role ?? _currentUser?.role,
+            permissions: restoredUser.permissions.isEmpty
+                ? _currentUser?.permissions
+                : restoredUser.permissions,
+          );
         } on ApiException {
           final bool refreshed = await _refreshSession();
           if (refreshed) {
-            _currentUser = await _authRepository.getCurrentUser();
+            final UserModel restoredUser = await _authRepository.getCurrentUser();
+            _currentUser = restoredUser.copyWith(
+              loginId: restoredUser.loginId ?? _currentUser?.loginId,
+              role: restoredUser.role ?? _currentUser?.role,
+              permissions: restoredUser.permissions.isEmpty
+                  ? _currentUser?.permissions
+                  : restoredUser.permissions,
+            );
           } else {
             await logout();
           }

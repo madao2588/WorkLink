@@ -29,6 +29,672 @@
   "contactsOnline": "在线",
   "contactsOffline": "离线",
 
+  "routerRecoveryFailedTitle": "页面恢复失败",
+  "routerReturnToApp": "返回应用",
+
+  "workplaceFallbackUserName": "同事",
+  "workplaceDateFormat": "MMMd",
+  "workplaceHeroSubtitle": "{dateLabel} · 今天也把重点工作推进一点",
+  "workplaceHeroStatCheckedIn": "已打卡",
+  "workplaceHeroStatPendingCheckIn": "待打卡",
+  "workplaceHeroStatLate": "迟到",
+  "workplaceHeroStatMissing": "缺卡",
+  "workplaceSectionOverviewTitle": "今日概览",
+  "workplaceSectionOverviewSubtitle": "把核心状态集中放在一个地方查看",
+  "workplaceSectionActionsTitle": "高频入口",
+  "workplaceSectionActionsSubtitle": "保留最常用的工作动作，减少跳转负担",
+  "workplaceSectionFocusTitle": "待你处理",
+  "workplaceSectionFocusSubtitle": "先处理最影响今天推进效率的事项",
+  "workplaceSectionPulseTitle": "运行状态",
+  "workplaceSectionPulseSubtitle": "快速确认关键模块是否都在正常同步",
+  "workplaceMetricStatusLabel": "今日状态",
+  "workplaceMetricStatusHintCheckedIn": "状态已同步",
+  "workplaceMetricStatusHintPending": "待完成打卡",
+  "workplaceMetricCheckInLabel": "打卡时间",
+  "workplaceMetricCheckInHintRecorded": "已记录",
+  "workplaceMetricCheckInHintNotYet": "尚未打卡",
+  "workplaceMetricPendingApprovalsLabel": "待审批",
+  "workplaceMetricPendingApprovalsHint": "需要跟进的流程",
+  "workplaceMetricUnreadMessagesLabel": "未读消息",
+  "workplaceMetricUnreadMessagesHint": "{count} 位同事在线 · 优先处理未读消息",
+  "workplaceActionAttendanceTitle": "考勤打卡",
+  "workplaceActionAttendanceSubtitle": "快速记录今日到岗状态",
+  "workplaceActionApprovalTitle": "审批中心",
+  "workplaceActionApprovalSubtitle": "查看并处理待办申请",
+  "workplaceActionLogTitle": "工作日志",
+  "workplaceActionLogSubtitle": "沉淀进展，方便团队同步",
+  "workplaceActionNoticeTitle": "企业公告",
+  "workplaceActionNoticeSubtitle": "查看团队通知与制度更新",
+  "workplaceGreetingMorning": "早上好",
+  "workplaceGreetingAfternoon": "下午好",
+  "workplaceGreetingEvening": "晚上好",
+  "workplaceNotCheckedInValue": "未打卡",
+  "workplaceActionEnterNow": "立即进入",
+  "workplaceSnackBarAlreadyCheckedIn": "今天已经完成打卡了",
+  "workplaceSnackBarCheckInSuccess": "打卡成功，状态已更新",
+  "workplaceSnackBarLogComingSoon": "工作日志模块正在整理中",
+  "workplaceSnackBarNoticeComingSoon": "企业公告模块稍后补充",
+  "workplacePriorityAttendanceTitle": "今日考勤",
+  "workplacePriorityAttendancePendingSummary": "还没有完成今天的打卡",
+  "workplacePriorityAttendancePendingDetail": "建议先完成签到，再开始处理其他工作",
+  "workplacePriorityAttendanceDoneSummary": "今日考勤已记录",
+  "workplacePriorityAttendanceDoneDetail": "签到时间：{time}",
+  "workplacePriorityApprovalsTitle": "审批跟进",
+  "workplacePriorityApprovalsNoneSummary": "目前没有待处理审批",
+  "workplacePriorityApprovalsNoneDetail": "可以继续处理其他事项，审批中心保持清空状态",
+  "workplacePriorityApprovalsPendingSummary": "有 {count} 条审批等待你处理",
+  "workplacePriorityApprovalsPendingDetail": "已通过 {approvedCount} 条 · 已驳回 {rejectedCount} 条",
+  "workplacePriorityMessagesTitle": "消息处理",
+  "workplacePriorityMessagesUnreadSummary": "还有 {count} 个会话未读",
+  "workplacePriorityMessagesUnreadDetail": "{onlineCount} 位同事在线，适合快速协作",
+  "workplacePriorityMessagesClearSummary": "消息队列已经处理完毕",
+  "workplacePriorityMessagesClearDetail": "{onlineCount} 位同事在线，当前没有未读压力",
+  "workplacePulseAttendanceLabel": "考勤接口",
+  "workplacePulseApprovalsLabel": "审批接口",
+  "workplacePulseMessagesLabel": "消息接口",
+  "workplacePulseStateLoading": "同步中",
+  "workplacePulseStateHealthy": "已同步",
+  "workplacePulseStateError": "异常",
+  "workplacePulseDetailHealthy": "数据已准备好",
+  "workplacePulseDetailLoading": "正在拉取最新状态",
+
+  "profilePleaseRelogin": "请重新登录",
+  "profileOverviewLoadFailed": "个人数据加载失败",
+  "profileMetricAttendanceLabel": "出勤状态",
+  "profileMetricAttendanceCaptionNotCheckedIn": "今日尚未打卡",
+  "profileMetricPendingApprovalsLabel": "待审批",
+  "profileMetricPendingApprovalsCaption": "待你跟进的流程事项",
+  "profileMetricMessagesLabel": "消息记录",
+  "profileMetricMessagesCaption": "未读 {count} 条",
+  "profileSectionManagementTitle": "管理能力",
+  "profileSectionManagementSubtitle": "只把真正和当前角色相关的后台入口展示出来",
+  "profileSectionWorkspaceTitle": "个人工作台",
+  "profileSectionWorkspaceSubtitle": "把常用入口整理成更容易查找的分组",
+  "profileSectionPersonalTitle": "个人事务",
+  "profileActionMyApprovalsTitle": "我的审批",
+  "profileActionMyApprovalsSubtitle": "查看申请记录与审批流转",
+  "profileActionSalarySlipsTitle": "工资条",
+  "profileActionSalarySlipsSubtitle": "查看薪资相关信息入口",
+  "profileActionBadgesTitle": "我的勋章",
+  "profileActionBadgesSubtitle": "沉淀阶段成果与荣誉记录",
+  "profileActionEnterpriseAdminTitle": "企业管理台",
+  "profileActionEnterpriseAdminSubtitle": "当前角色：{role}",
+  "profileSectionSettingsTitle": "系统设置",
+  "profileActionAccountSecurityTitle": "账号与安全",
+  "profileActionAccountSecuritySubtitle": "登录设备、隐私和安全设置",
+  "profileActionGeneralSettingsTitle": "通用设置",
+  "profileActionGeneralSettingsSubtitle": "通知、显示和常用偏好",
+  "profileActionHelpFeedbackTitle": "帮助与反馈",
+  "profileActionHelpFeedbackSubtitle": "提交问题或获取使用帮助",
+  "profileHeroOnline": "在线办公中",
+  "profileHeroVerified": "已认证账号",
+  "profileHeroUnreadMessagesLabel": "未读消息",
+  "profileLogoutButton": "退出登录",
+  "profileActionComingSoon": "{title} 功能正在完善中",
+  "profileLogoutDialogTitle": "退出登录",
+  "profileLogoutDialogContent": "确定要退出当前账号吗？",
+  "profileDialogCancel": "取消",
+  "profileDialogConfirmLogout": "退出",
+  "profileAttendanceCheckedIn": "已打卡",
+  "profileAttendanceLate": "迟到",
+  "profileAttendancePending": "待打卡",
+  "profileCheckInTimeLabel": "签到时间 {time}",
+  "profileReload": "重新加载",
+
+  "salarySlipsTitle": "工资条",
+  "salarySlipsRecentTitle": "最近薪资记录",
+  "salarySlipsEmpty": "暂无工资条数据",
+  "salarySlipsSummaryWaiting": "等待后端返回工资条数据",
+  "salarySlipsSummaryLatest": "最近一期为 {month}，已在后端工资条接口中同步。",
+  "salarySlipsSummaryCurrentNet": "本月实发",
+  "salarySlipsNetPayLabel": "实发工资",
+  "salarySlipsGrossPayLabel": "应发工资",
+  "salarySlipsIssuedAtLabel": "发放时间",
+
+  "badgesTitle": "我的勋章",
+  "badgesIntroEmpty": "勋章数据会从后端个人中心接口加载。",
+  "badgesIntroCount": "当前已同步 {count} 枚勋章，记录你在协作中的阶段成果。",
+  "badgesEmpty": "暂无勋章数据",
+
+  "accountSecurityTitle": "账号与安全",
+  "accountSecurityIntroEmpty": "账号安全信息将通过后端安全接口加载。",
+  "accountSecurityIntroLoaded": "已同步绑定方式、设备信息和安全策略，便于统一管理登录安全。",
+  "accountSecurityEmpty": "暂无账号安全数据",
+  "accountSecuritySectionAccountInfo": "账号信息",
+  "accountSecurityLabelMobile": "绑定手机",
+  "accountSecurityLabelEmail": "绑定邮箱",
+  "accountSecurityLabelPasswordUpdatedAt": "密码更新时间",
+  "accountSecurityLabelMfa": "多因素认证",
+  "accountSecurityMfaEnabled": "已开启",
+  "accountSecurityMfaDisabled": "未开启",
+  "accountSecuritySectionRecentDevices": "最近登录设备",
+  "accountSecurityCurrentDevice": "当前设备",
+
+  "generalSettingsTitle": "通用设置",
+  "generalSettingsEmpty": "暂无设置数据",
+  "generalSettingsSectionNotifications": "通知偏好",
+  "generalSettingsPushTitle": "消息推送",
+  "generalSettingsPushSubtitle": "收到聊天或审批时即时提醒",
+  "generalSettingsSoundTitle": "声音提醒",
+  "generalSettingsSoundSubtitle": "允许声音反馈和系统提示",
+  "generalSettingsSectionDisplay": "显示与偏好",
+  "generalSettingsLanguageTitle": "语言",
+  "generalSettingsLanguageSubtitle": "设置界面显示语言",
+  "generalSettingsLanguageZhHans": "简体中文",
+  "generalSettingsThemeTitle": "主题",
+  "generalSettingsThemeSubtitle": "后端已保存当前主题模式",
+  "generalSettingsThemeLight": "浅色",
+  "generalSettingsThemeDark": "深色",
+  "generalSettingsSectionOther": "其他",
+  "generalSettingsCacheSizeTitle": "缓存大小",
+  "generalSettingsVersionTitle": "当前版本",
+  "generalSettingsVersionValue": "WorkLink 1.0.0",
+
+  "helpFeedbackTitle": "帮助与反馈",
+  "helpFeedbackIntro": "这页现在已经能把反馈真实提交到后端接口，方便你后续接工单、邮件或后台管理。",
+  "helpFeedbackFaqMessagesTitle": "为什么消息没有刷新？",
+  "helpFeedbackFaqMessagesAnswer": "请先确认本地后端已启动，当前消息和个人中心已经开始依赖真实接口。",
+  "helpFeedbackFaqApprovalTitle": "审批提交后在哪里查看？",
+  "helpFeedbackFaqApprovalAnswer": "可以在“我的审批”或工作台入口进入审批中心查看最新记录。",
+  "helpFeedbackFaqLoginTitle": "登录失败怎么办？",
+  "helpFeedbackFaqLoginAnswer": "先确认后端服务正常运行，再检查演示账号 zhangsan / 123456 是否可用。",
+  "helpFeedbackSubmitSectionTitle": "提交反馈",
+  "helpFeedbackCategoryFeature": "功能建议",
+  "helpFeedbackCategoryUi": "界面体验",
+  "helpFeedbackCategoryBug": "Bug 反馈",
+  "helpFeedbackInputHint": "描述你的问题或建议，提交后会通过后端反馈接口保存。",
+  "helpFeedbackSubmitting": "提交中...",
+  "helpFeedbackSubmitButton": "提交反馈",
+  "helpFeedbackEmptyContent": "请先填写反馈内容",
+  "helpFeedbackSubmitSuccess": "反馈已提交到后端",
+
+  "approvalTitle": "我的审批",
+  "approvalEmpty": "暂无申请记录",
+  "approvalReasonLabel": "申请原因：{reason}",
+  "approvalSubmittedAtLabel": "提交时间：{time}",
+  "approvalStatusPending": "审批中",
+  "approvalStatusApproved": "已通过",
+  "approvalStatusRejected": "已驳回",
+  "approvalDecisionTitle": "审批决策",
+  "approvalApproveAction": "同意申请",
+  "approvalRejectAction": "驳回申请",
+  "approvalSubmitDialogTitle": "发起申请",
+  "approvalSubmitDialogHint": "请输入申请原因（如：感冒请假）",
+  "approvalDialogCancel": "取消",
+  "approvalDialogSubmit": "提交",
+
+  "enterpriseAdminPermissionEmployees": "当前账号没有员工资料维护权限",
+  "enterpriseAdminPermissionDepartments": "当前账号没有部门维护权限",
+  "enterpriseAdminPermissionPositions": "当前账号没有岗位维护权限",
+  "enterpriseAdminPermissionAccounts": "当前账号没有账号权限配置权限",
+  "enterpriseAdminPermissionExport": "当前账号没有 Excel 导出权限",
+  "enterpriseAdminPermissionDashboard": "当前账号没有驾驶舱查看权限",
+  "enterpriseAdminTitle": "企业管理台",
+  "enterpriseAdminSubtitle": "按角色呈现组织数据、编制概览和可达管理能力，先把后台入口做轻但做稳。",
+  "enterpriseAdminRoleChip": "角色：{role}",
+  "enterpriseAdminSessionChip": "会话：{name}",
+  "enterpriseAdminFilterAll": "全部",
+  "enterpriseAdminDataSourceChipLive": "组织数据：后端同步",
+  "enterpriseAdminDataSourceChipFallback": "组织数据：演示回退",
+  "enterpriseAdminDataSourceChipLoading": "组织数据：同步中",
+  "enterpriseAdminSectionOverviewTitle": "总览",
+  "enterpriseAdminSectionOverviewSubtitle": "先用一页轻量驾驶舱，把当前管理范围清晰展示出来",
+  "enterpriseAdminSectionModulesTitle": "模块权限",
+  "enterpriseAdminSectionModulesSubtitle": "每个管理域都会按当前角色显示可用或锁定状态",
+  "enterpriseAdminSectionActionsTitle": "操作中心",
+  "enterpriseAdminSectionActionsSubtitle": "按当前权限执行同步与导出，先把真正能操作的动作集中起来",
+  "enterpriseAdminSectionPreviewTitle": "数据速览",
+  "enterpriseAdminSectionPreviewSubtitle": "把当前角色真正能查看的数据做成轻量明细入口，先从只读速览做稳",
+  "enterpriseAdminSectionPermissionsTitle": "权限摘要",
+  "enterpriseAdminSectionPermissionsSubtitle": "快速确认当前账号此刻到底能管理什么",
+  "enterpriseAdminDataSourceLiveTitle": "企业管理数据已切到后端同步",
+  "enterpriseAdminDataSourceLiveSubtitle": "员工、部门、岗位和账号摘要现在都来自后端总览接口，不再只依赖本地演示列表。",
+  "enterpriseAdminDataSourceLoadingTitle": "正在同步组织数据",
+  "enterpriseAdminDataSourceLoadingSubtitle": "企业管理页正在从后端拉取最新的员工、部门、岗位和账号信息。",
+  "enterpriseAdminDataSourceFallbackTitle": "企业管理数据暂时仍在使用演示数据",
+  "enterpriseAdminDataSourceFallbackSubtitle": "后端总览接口暂未成功返回，页面已自动回退到本地示例数据，方便你继续查看。",
+  "enterpriseAdminRetrySync": "重新同步",
+  "enterpriseAdminActionSyncNow": "立即同步",
+  "enterpriseAdminActionChangeCenter": "变更中心",
+  "enterpriseAdminActionExportEmployees": "导出员工",
+  "enterpriseAdminActionExportDepartments": "导出部门",
+  "enterpriseAdminActionExportPositions": "导出岗位",
+  "enterpriseAdminActionExportReady": "当前账号可执行导出，选择保存位置后会提示文件保存路径。",
+  "enterpriseAdminActionExportUnavailable": "当前账号暂时没有导出权限，所以导出动作会保持禁用。",
+  "enterpriseAdminExportCancelled": "已取消导出。",
+  "enterpriseAdminExportSuccess": "导出完成：{path}",
+  "enterpriseAdminSyncCompleted": "组织数据已经完成同步。",
+  "enterpriseAdminPreviewEmployeesTitle": "员工速览",
+  "enterpriseAdminPreviewEmployeesSubtitle": "查看最新员工记录，并打开轻量只读明细",
+  "enterpriseAdminPreviewEmployeesEmpty": "当前还没有员工数据。",
+  "enterpriseAdminPreviewDepartmentsTitle": "部门速览",
+  "enterpriseAdminPreviewDepartmentsSubtitle": "查看负责人、成员数量和部门说明",
+  "enterpriseAdminPreviewDepartmentsEmpty": "当前还没有部门数据。",
+  "enterpriseAdminPreviewOpenAll": "查看全部",
+  "enterpriseAdminPreviewPositionsTitle": "岗位速览",
+  "enterpriseAdminPreviewPositionsSubtitle": "快速查看级别、编制人数和招聘缺口",
+  "enterpriseAdminPreviewPositionsEmpty": "当前还没有岗位数据。",
+  "enterpriseAdminPreviewAccountsTitle": "账号速览",
+  "enterpriseAdminPreviewAccountsSubtitle": "查看账号身份、映射角色和启停状态",
+  "enterpriseAdminPreviewAccountsEmpty": "当前还没有账号数据。",
+  "enterpriseAdminPreviewAccountEnabled": "启用",
+  "enterpriseAdminPreviewAccountDisabled": "停用",
+  "enterpriseAdminEmployeesPageTitle": "员工列表",
+  "enterpriseAdminEmployeesPageSubtitle": "把当前角色可查看的员工档案放到独立只读页里，方便连续检索与浏览。",
+  "enterpriseAdminEmployeesSearchHint": "搜索姓名、工号、部门或岗位",
+  "enterpriseAdminEmployeesPageSummary": "当前共 {count} 名员工",
+  "@enterpriseAdminEmployeesPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminEmployeesEmpty": "当前筛选下没有员工记录。",
+  "enterpriseAdminEmployeesStatsDepartments": "覆盖部门",
+  "enterpriseAdminEmployeesStatsPositions": "覆盖岗位",
+  "enterpriseAdminDepartmentsPageTitle": "部门列表",
+  "enterpriseAdminDepartmentsPageSubtitle": "把部门负责人、成员规模和说明单独展开，便于按组织维度连续查看。",
+  "enterpriseAdminDepartmentsSearchHint": "搜索部门名称或负责人",
+  "enterpriseAdminDepartmentsPageSummary": "当前共 {count} 个部门",
+  "@enterpriseAdminDepartmentsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminDepartmentsEmpty": "当前筛选下没有部门记录。",
+  "enterpriseAdminDepartmentsMemberCount": "{count} 人",
+  "@enterpriseAdminDepartmentsMemberCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminDepartmentsStatsMembers": "成员总数",
+  "enterpriseAdminDepartmentsStatsLargest": "最大团队",
+  "enterpriseAdminDepartmentsFilterLarge": "10 人以上",
+  "enterpriseAdminDepartmentsFilterMedium": "5-9 人",
+  "enterpriseAdminDepartmentsFilterCompact": "4 人以下",
+  "enterpriseAdminPositionsPageTitle": "岗位列表",
+  "enterpriseAdminPositionsPageSubtitle": "把岗位级别、编制人数和招聘缺口单独展开，便于从编制视角连续查看。",
+  "enterpriseAdminPositionsSearchHint": "搜索岗位名称、所属部门或级别",
+  "enterpriseAdminPositionsPageSummary": "当前共 {count} 个岗位",
+  "@enterpriseAdminPositionsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminPositionsEmpty": "当前筛选下没有岗位记录。",
+  "enterpriseAdminPositionsVacancy": "缺口 {count}",
+  "@enterpriseAdminPositionsVacancy": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminPositionsStatsHeadcount": "编制人数",
+  "enterpriseAdminPositionsStatsVacancy": "招聘缺口",
+  "enterpriseAdminAccountsPageTitle": "账号列表",
+  "enterpriseAdminAccountsPageSubtitle": "把当前角色可见的系统账号集中成只读页，便于确认登录标识、角色和启停状态。",
+  "enterpriseAdminAccountsSearchHint": "搜索账号名称或登录账号",
+  "enterpriseAdminAccountsPageSummary": "当前共 {count} 个账号",
+  "@enterpriseAdminAccountsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminAccountsEmpty": "当前筛选下没有账号记录。",
+  "enterpriseAdminAccountsStatsEnabled": "启用中",
+  "enterpriseAdminAccountsStatsDisabled": "停用中",
+  "enterpriseAdminChangeRequestsPageTitle": "变更中心",
+  "enterpriseAdminChangeRequestsPageSubtitle": "把直接编辑和变更申请集中到一页查看，方便连续追踪最近的后台改动。",
+  "enterpriseAdminChangeRequestsPageSummary": "当前共 {count} 条变更记录",
+  "@enterpriseAdminChangeRequestsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminChangeRequestsMetricTotal": "总记录",
+  "enterpriseAdminChangeRequestsMetricApplied": "已应用",
+  "enterpriseAdminChangeRequestsMetricDrafted": "草稿中",
+  "enterpriseAdminChangeRequestsSearchHint": "搜索申请编号、对象名称、说明或提交人",
+  "enterpriseAdminChangeRequestsEmpty": "当前筛选下没有变更记录。",
+  "enterpriseAdminChangeRequestsStatusApplied": "已应用",
+  "enterpriseAdminChangeRequestsStatusDrafted": "草稿中",
+  "enterpriseAdminChangeRequestsStatusRejected": "已驳回",
+  "enterpriseAdminChangeRequestsEntityEmployee": "员工",
+  "enterpriseAdminChangeRequestsEntityDepartment": "部门",
+  "enterpriseAdminChangeRequestsEntityPosition": "岗位",
+  "enterpriseAdminChangeRequestsEntityAccount": "账号",
+  "enterpriseAdminChangeRequestsOpenRecord": "查看关联对象",
+  "enterpriseAdminChangeRequestsRequester": "提交人",
+  "enterpriseAdminChangeRequestsSubmittedAt": "提交时间",
+  "enterpriseAdminChangeRequestDetailTitle": "变更详情",
+  "enterpriseAdminChangeRequestDetailSubtitle": "查看这条 {entityType} 变更的保存快照和上下文信息。",
+  "@enterpriseAdminChangeRequestDetailSubtitle": {
+    "placeholders": {
+      "entityType": {}
+    }
+  },
+  "enterpriseAdminChangeRequestDetailLoadFailed": "这条变更详情加载失败。",
+  "enterpriseAdminChangeRequestDetailStatus": "状态",
+  "enterpriseAdminChangeRequestDetailNoteTitle": "变更说明",
+  "enterpriseAdminChangeRequestDetailObjectLabel": "目标对象",
+  "enterpriseAdminChangeRequestDetailSnapshotTitle": "保存快照",
+  "enterpriseAdminChangeRequestDetailSnapshotSubtitle": "这里展示的是提交草稿或直接编辑时记录下来的字段快照。",
+  "enterpriseAdminChangeRequestDetailSnapshotEmpty": "这条变更当前没有可展示的字段快照。",
+  "enterpriseAdminChangeRequestDetailCompareTitle": "字段对比",
+  "enterpriseAdminChangeRequestDetailCompareSubtitle": "把提交时的快照和当前最新数据放在一起，方便快速看出是否已经发生偏移。",
+  "enterpriseAdminChangeRequestDetailCompareEmpty": "这条变更当前没有可对比的字段。",
+  "enterpriseAdminChangeRequestDetailCompareSnapshot": "快照值",
+  "enterpriseAdminChangeRequestDetailCompareCurrent": "当前值",
+  "enterpriseAdminChangeRequestDetailCompareSame": "一致",
+  "enterpriseAdminChangeRequestDetailCompareDifferent": "已变化",
+  "enterpriseAdminChangeRequestDetailCompareUnavailable": "暂无数据",
+  "enterpriseAdminChangeRequestApprove": "批准变更",
+  "enterpriseAdminChangeRequestReject": "驳回变更",
+  "enterpriseAdminChangeRequestProcessing": "处理中...",
+  "enterpriseAdminChangeRequestApproveSuccess": "这条变更已批准。",
+  "enterpriseAdminChangeRequestRejectSuccess": "这条变更已驳回。",
+  "enterpriseAdminChangeRequestReviewUnavailable": "当前账号不能处理这条变更。",
+  "enterpriseAdminDetailPanelSubtitle": "当前展示的是只读详情，适合先快速核对资料与组织信息。",
+  "enterpriseAdminDetailPanelHint": "编辑、审批流和变更留痕会在后续真实管理能力接入后放到这里；这一阶段先把详情浏览做稳。",
+  "enterpriseAdminDetailActionEdit": "编辑占位",
+  "enterpriseAdminDetailActionDirectEdit": "直接编辑",
+  "enterpriseAdminDetailActionRequestChange": "申请变更",
+  "enterpriseAdminDetailActionAudit": "变更记录",
+  "enterpriseAdminDetailActionClose": "关闭",
+  "enterpriseAdminEditActionCollapse": "收起编辑",
+  "enterpriseAdminEditPanelTitle": "直接编辑",
+  "enterpriseAdminEditPanelHint": "在这里直接修改员工资料并保存到后端。保存成功后，列表和详情会立即同步。",
+  "enterpriseAdminEditEmployeeTitle": "编辑员工资料",
+  "enterpriseAdminEditEmployeeHint": "这一步会直接写入后端员工资料，适合快速修正部门、岗位、邮箱和手机号。",
+  "enterpriseAdminEditDepartmentTitle": "编辑部门资料",
+  "enterpriseAdminEditDepartmentHint": "这一步会直接更新部门资料视图。保存后，部门卡片、员工部门名称和岗位所属部门会一起同步。",
+  "enterpriseAdminEditPositionTitle": "编辑岗位资料",
+  "enterpriseAdminEditPositionHint": "这一步会直接更新岗位名称、级别和招聘缺口。保存后，岗位概览和关联员工的岗位名称会一起同步。",
+  "enterpriseAdminEditAccountTitle": "编辑账号权限",
+  "enterpriseAdminEditAccountHint": "这一步会直接更新账号角色和启停用状态。登录、会话恢复和后端权限校验都会使用这份最新结果。",
+  "enterpriseAdminEditSubmit": "保存更改",
+  "enterpriseAdminEditSaving": "保存中...",
+  "enterpriseAdminEditSaveSuccess": "更改已保存。",
+  "enterpriseAdminEditEmpty": "请先填写完整的可编辑字段。",
+  "enterpriseAdminDraftActionCollapse": "收起草稿",
+  "enterpriseAdminDraftPanelTitle": "申请变更",
+  "enterpriseAdminDraftPanelHint": "这一步先生成本地变更草稿，方便你确认改动方向；后续接入真实写接口后会从这里提交审批或变更单。",
+  "enterpriseAdminDraftCurrentSnapshot": "当前字段快照",
+  "enterpriseAdminDraftInputHint": "描述你想调整的内容，例如：负责人改为王五，原因是组织轮岗。",
+  "enterpriseAdminDraftSubmit": "生成变更草稿",
+  "enterpriseAdminDraftSubmitting": "提交中...",
+  "enterpriseAdminDraftSubmitSuccess": "变更草稿已生成，并已写入本地时间线。",
+  "enterpriseAdminDraftSubmitSuccessWithRequest": "变更草稿已提交，申请编号：{requestNo}",
+  "@enterpriseAdminDraftSubmitSuccessWithRequest": {
+    "placeholders": {
+      "requestNo": {}
+    }
+  },
+  "enterpriseAdminDraftEmpty": "请先填写变更说明。",
+  "enterpriseAdminDraftTypeProfile": "资料修正",
+  "enterpriseAdminDraftTypeOrg": "组织调整",
+  "enterpriseAdminDraftTypeStatus": "状态变更",
+  "enterpriseAdminDraftTimelineTitle": "已生成 {type} 草稿",
+  "@enterpriseAdminDraftTimelineTitle": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "enterpriseAdminDraftTimelineDetail": "草稿说明：{note}",
+  "@enterpriseAdminDraftTimelineDetail": {
+    "placeholders": {
+      "note": {}
+    }
+  },
+  "enterpriseAdminDraftTimelineDetailWithRequest": "草稿说明：{note}，申请编号：{requestNo}",
+  "@enterpriseAdminDraftTimelineDetailWithRequest": {
+    "placeholders": {
+      "note": {},
+      "requestNo": {}
+    }
+  },
+  "enterpriseAdminDetailActionCopy": "复制字段",
+  "enterpriseAdminDetailActionOpenRelated": "查看关联对象",
+  "enterpriseAdminDetailCopySuccess": "已复制：{label}",
+  "@enterpriseAdminDetailCopySuccess": {
+    "placeholders": {
+      "label": {}
+    }
+  },
+  "enterpriseAdminTimelineTitle": "变更时间线",
+  "enterpriseAdminTimelineHint": "当前展示的是只读变更轨迹，用来快速核对最近同步、状态变化和关键组织调整。",
+  "enterpriseAdminTimelineEmpty": "当前还没有可展示的变更记录。",
+  "enterpriseAdminTimelineRecent": "刚刚",
+  "enterpriseAdminTimelineToday": "今天",
+  "enterpriseAdminTimelineEarlier": "更早",
+  "enterpriseAdminTimelineEmployeeStatus": "员工状态更新",
+  "enterpriseAdminTimelineEmployeeStatusDetail": "当前状态已同步为 {status}。",
+  "@enterpriseAdminTimelineEmployeeStatusDetail": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "enterpriseAdminTimelineEmployeeSync": "组织信息已同步",
+  "enterpriseAdminTimelineEmployeeSyncDetail": "员工当前归属 {department}，岗位为 {position}。",
+  "@enterpriseAdminTimelineEmployeeSyncDetail": {
+    "placeholders": {
+      "department": {},
+      "position": {}
+    }
+  },
+  "enterpriseAdminTimelineEmployeeUpdated": "员工资料已更新",
+  "enterpriseAdminTimelineEmployeeUpdatedDetail": "已更新为 {department} / {position}，联系电话 {phone}，邮箱 {email}。",
+  "@enterpriseAdminTimelineEmployeeUpdatedDetail": {
+    "placeholders": {
+      "department": {},
+      "position": {},
+      "phone": {},
+      "email": {}
+    }
+  },
+  "enterpriseAdminTimelineEmployeeCreated": "员工档案创建",
+  "enterpriseAdminTimelineEmployeeCreatedDetail": "系统已为工号 {employeeNo} 建立基础档案。",
+  "@enterpriseAdminTimelineEmployeeCreatedDetail": {
+    "placeholders": {
+      "employeeNo": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentLeader": "负责人已确认",
+  "enterpriseAdminTimelineDepartmentLeaderDetail": "当前负责人为 {leader}。",
+  "@enterpriseAdminTimelineDepartmentLeaderDetail": {
+    "placeholders": {
+      "leader": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentSize": "成员规模刷新",
+  "enterpriseAdminTimelineDepartmentSizeDetail": "当前部门成员数更新为 {count} 人。",
+  "@enterpriseAdminTimelineDepartmentSizeDetail": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentUpdated": "部门资料已更新",
+  "enterpriseAdminTimelineDepartmentUpdatedDetail": "已更新为 {name}，负责人 {leader}。",
+  "@enterpriseAdminTimelineDepartmentUpdatedDetail": {
+    "placeholders": {
+      "name": {},
+      "leader": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentCreated": "部门资料创建",
+  "enterpriseAdminTimelineDepartmentCreatedDetail": "{name} 已建立基础组织资料。",
+  "@enterpriseAdminTimelineDepartmentCreatedDetail": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionVacancy": "招聘缺口同步",
+  "enterpriseAdminTimelinePositionVacancyDetail": "当前招聘缺口为 {count} 个。",
+  "@enterpriseAdminTimelinePositionVacancyDetail": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionHeadcount": "编制人数更新",
+  "enterpriseAdminTimelinePositionHeadcountDetail": "当前编制人数为 {count} 人。",
+  "@enterpriseAdminTimelinePositionHeadcountDetail": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionCreated": "岗位规划建立",
+  "enterpriseAdminTimelinePositionCreatedDetail": "岗位规划已挂到 {department} 下。",
+  "@enterpriseAdminTimelinePositionCreatedDetail": {
+    "placeholders": {
+      "department": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionUpdated": "岗位资料已更新",
+  "enterpriseAdminTimelinePositionUpdatedDetail": "已更新为 {title} / {level}，招聘缺口 {openQuota} 个。",
+  "@enterpriseAdminTimelinePositionUpdatedDetail": {
+    "placeholders": {
+      "title": {},
+      "level": {},
+      "openQuota": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountStatus": "账号状态更新",
+  "enterpriseAdminTimelineAccountStatusDetail": "当前账号状态为 {status}。",
+  "@enterpriseAdminTimelineAccountStatusDetail": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountRole": "角色映射刷新",
+  "enterpriseAdminTimelineAccountRoleDetail": "当前账号角色为 {role}。",
+  "@enterpriseAdminTimelineAccountRoleDetail": {
+    "placeholders": {
+      "role": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountUpdated": "账号权限已更新",
+  "enterpriseAdminTimelineAccountUpdatedDetail": "已更新为角色 {role}，状态 {status}。",
+  "@enterpriseAdminTimelineAccountUpdatedDetail": {
+    "placeholders": {
+      "role": {},
+      "status": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountCreated": "账号资料创建",
+  "enterpriseAdminTimelineAccountCreatedDetail": "登录账号 {loginId} 已写入系统目录。",
+  "@enterpriseAdminTimelineAccountCreatedDetail": {
+    "placeholders": {
+      "loginId": {}
+    }
+  },
+  "enterpriseAdminDetailEmployeeNo": "工号",
+  "enterpriseAdminDetailDepartment": "部门",
+  "enterpriseAdminDetailPosition": "岗位",
+  "enterpriseAdminDetailEmail": "邮箱",
+  "enterpriseAdminDetailPhone": "电话",
+  "enterpriseAdminDetailStatus": "状态",
+  "enterpriseAdminDetailLeader": "负责人",
+  "enterpriseAdminDetailMemberCount": "成员数",
+  "enterpriseAdminDetailDescription": "说明",
+  "enterpriseAdminDetailLevel": "级别",
+  "enterpriseAdminDetailHeadcount": "编制人数",
+  "enterpriseAdminDetailVacancy": "招聘缺口",
+  "enterpriseAdminDetailLoginId": "登录账号",
+  "enterpriseAdminDetailRole": "角色",
+  "enterpriseAdminMetricEmployees": "员工数",
+  "enterpriseAdminMetricDepartments": "部门数",
+  "enterpriseAdminMetricPositions": "岗位数",
+  "enterpriseAdminMetricAccounts": "启用账号",
+  "enterpriseAdminModuleEmployeesTitle": "员工资料",
+  "enterpriseAdminModuleEmployeesSubtitle": "查看员工档案、状态和组织归属",
+  "enterpriseAdminModuleDepartmentsTitle": "部门设置",
+  "enterpriseAdminModuleDepartmentsSubtitle": "维护组织结构、负责人和编制边界",
+  "enterpriseAdminModulePositionsTitle": "岗位规划",
+  "enterpriseAdminModulePositionsSubtitle": "跟踪级别、编制和招聘缺口",
+  "enterpriseAdminModuleAccountsTitle": "账号权限",
+  "enterpriseAdminModuleAccountsSubtitle": "配置管理角色和账号启停状态",
+  "enterpriseAdminModuleExportTitle": "导出中心",
+  "enterpriseAdminModuleExportSubtitle": "在权限允许时导出 Excel 快照",
+  "enterpriseAdminModuleAllowedHint": "当前角色可用",
+  "enterpriseAdminStatusAvailable": "可用",
+  "enterpriseAdminStatusLocked": "锁定",
+  "enterpriseAdminPermissionLineEmployees": "维护员工资料",
+  "enterpriseAdminPermissionLineDepartments": "维护部门设置",
+  "enterpriseAdminPermissionLinePositions": "维护岗位规划",
+  "enterpriseAdminPermissionLineAccounts": "配置账号权限",
+  "enterpriseAdminPermissionLineExport": "导出 Excel 快照",
+  "enterpriseAdminExportHeaderEmployeeNo": "工号",
+  "enterpriseAdminExportHeaderName": "姓名",
+  "enterpriseAdminExportHeaderDepartment": "部门",
+  "enterpriseAdminExportHeaderPosition": "岗位",
+  "enterpriseAdminExportHeaderPhone": "电话",
+  "enterpriseAdminExportHeaderEmail": "邮箱",
+  "enterpriseAdminExportHeaderStatus": "状态",
+  "enterpriseAdminExportHeaderLeader": "负责人",
+  "enterpriseAdminExportHeaderCount": "人数",
+  "enterpriseAdminExportHeaderDescription": "说明",
+  "enterpriseAdminExportHeaderLevel": "级别",
+  "enterpriseAdminExportHeaderDepartmentOwned": "所属部门",
+  "enterpriseAdminExportHeaderHeadcount": "编制人数",
+  "enterpriseAdminExportHeaderVacancy": "招聘缺口",
+  "enterpriseAdminMonthJan": "1月",
+  "enterpriseAdminMonthFeb": "2月",
+  "enterpriseAdminMonthMar": "3月",
+  "enterpriseAdminMonthApr": "4月",
+  "enterpriseAdminMonthMay": "5月",
+  "enterpriseAdminMonthJun": "6月",
+  "enterpriseAdminSessionUserFallback": "当前账号",
+  "enterpriseAdminRoleSuperAdmin": "超级管理员",
+  "enterpriseAdminRoleHrManager": "HR 管理员",
+  "enterpriseAdminRoleDepartmentManager": "部门负责人",
+  "enterpriseAdminRoleViewer": "只读访客",
+
+  "workplaceSectionUpdatesTitle": "动态与节奏",
+  "workplaceSectionUpdatesSubtitle": "用公告和最近动态，帮助你在打开应用后快速找回上下文",
+  "workplaceSectionCommandTitle": "今日指挥台",
+  "workplaceSectionCommandSubtitle": "先处理最能减少今天阻力的那一步",
+  "workplaceCommandRecommendedLabel": "建议先做",
+  "workplaceCommandQueueLabel": "当前队列",
+  "workplaceCommandQueueSubtitle": "把三条主工作流里仍待处理的事项压缩到一个紧凑视图里",
+  "workplacePriorityLevelCritical": "优先",
+  "workplacePriorityLevelHigh": "较高",
+  "workplacePriorityLevelSteady": "平稳",
+  "workplaceSectionAnnouncementsTitle": "公告提醒",
+  "workplaceSectionAnnouncementsSubtitle": "开始工作前，先看几条和当日推进有关的提醒",
+  "workplaceSectionAnnouncementsTimelineTitle": "最近动态",
+  "workplaceSectionAnnouncementsTimelineSubtitle": "把今天的审批、打卡和会话更新压缩到一条短时间线里",
+  "workplaceAnnouncementTagPolicy": "制度",
+  "workplaceAnnouncementTagReminder": "提醒",
+  "workplaceAnnouncementTagCollaboration": "协作",
+  "workplaceAnnouncementApprovalPolicyTitle": "审批时效提醒已刷新",
+  "workplaceAnnouncementApprovalPolicyDetail": "当天 18:00 前提交的申请，建议尽量在当日完成首轮处理。",
+  "workplaceAnnouncementAttendanceTitle": "考勤异常现在会优先显示",
+  "workplaceAnnouncementAttendanceDetail": "迟到和缺卡状态会持续保留在工作台上，直到被处理为止。",
+  "workplaceAnnouncementCollaborationTitle": "未读会话会优先进入协作视野",
+  "workplaceAnnouncementCollaborationDetail": "开始深度工作前，建议先清理未读会话，避免遗漏紧急沟通。",
+  "workplaceAnnouncementAction": "在工作台查看",
+  "workplaceSnackBarLogReady": "最近动态已经展示在下方时间线里了",
+  "workplaceSnackBarNoticeReady": "公告提醒已经展示在下方面板里了",
+  "workplaceTimelineAttendanceDoneTitle": "今日考勤已记录",
+  "workplaceTimelineAttendanceDoneDetail": "签到时间 {time}",
+  "workplaceTimelineAttendancePendingTitle": "今日考勤仍待处理",
+  "workplaceTimelineAttendancePendingDetail": "今天还没有完成打卡，建议先补齐再处理其他事项。",
+  "workplaceTimelineApprovalTitle": "{applicant} 提交了一条审批",
+  "workplaceTimelineApprovalPendingDetail": "待继续跟进: {title}",
+  "workplaceTimelineApprovalApprovedDetail": "已通过并归档: {title}",
+  "workplaceTimelineApprovalRejectedDetail": "已退回修改: {title}",
+  "workplaceTimelineMessageTitle": "与 {name} 的会话有更新",
+  "workplaceTimelineMessageUnreadDetail": "{preview} - 还有 {count} 条未读",
+  "workplaceTimelineMessageReadDetail": "{preview}",
+  "workplaceTimelineTagAttendance": "考勤",
+  "workplaceTimelineTagAttention": "待处理",
+  "workplaceTimelineTagPending": "待审批",
+  "workplaceTimelineTagApproved": "已通过",
+  "workplaceTimelineTagRejected": "已退回",
+  "workplaceTimelineTagUnread": "未读",
+  "workplaceTimelineTagUpdated": "已更新",
+  "workplaceTimelineEmptyState": "审批、打卡和消息同步后，会在这里显示最近动态。",
+  "workplaceTimelineTimeToday": "今天 {time}",
+
   "@contactsHeaderOnlineCount": {
     "placeholders": {
       "count": { "type": "int" }
@@ -38,6 +704,152 @@
     "placeholders": {
       "count": { "type": "int" }
     }
-  }
+  },
+  "@workplaceHeroSubtitle": {
+    "placeholders": {
+      "dateLabel": { "type": "String" }
+    }
+  },
+  "@workplaceMetricUnreadMessagesHint": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@workplacePriorityAttendanceDoneDetail": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@workplacePriorityApprovalsPendingSummary": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@workplacePriorityApprovalsPendingDetail": {
+    "placeholders": {
+      "approvedCount": { "type": "int" },
+      "rejectedCount": { "type": "int" }
+    }
+  },
+  "@workplacePriorityMessagesUnreadSummary": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@workplacePriorityMessagesUnreadDetail": {
+    "placeholders": {
+      "onlineCount": { "type": "int" }
+    }
+  },
+  "@workplacePriorityMessagesClearDetail": {
+    "placeholders": {
+      "onlineCount": { "type": "int" }
+    }
+  },
+  "@workplaceTimelineAttendanceDoneDetail": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalTitle": {
+    "placeholders": {
+      "applicant": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalPendingDetail": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalApprovedDetail": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalRejectedDetail": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineMessageTitle": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineMessageUnreadDetail": {
+    "placeholders": {
+      "preview": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "@workplaceTimelineMessageReadDetail": {
+    "placeholders": {
+      "preview": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineTimeToday": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@profileMetricMessagesCaption": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@profileActionEnterpriseAdminSubtitle": {
+    "placeholders": {
+      "role": { "type": "String" }
+    }
+  },
+  "@profileActionComingSoon": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@enterpriseAdminRoleChip": {
+    "placeholders": {
+      "role": { "type": "String" }
+    }
+  },
+  "@enterpriseAdminSessionChip": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "@enterpriseAdminExportSuccess": {
+    "placeholders": {
+      "path": { "type": "String" }
+    }
+  },
+  "@profileCheckInTimeLabel": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@salarySlipsSummaryLatest": {
+    "placeholders": {
+      "month": { "type": "String" }
+    }
+  },
+  "@badgesIntroCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@approvalReasonLabel": {
+    "placeholders": {
+      "reason": { "type": "String" }
+    }
+  },
+  "@approvalSubmittedAtLabel": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "themeToggleSwitchToDark": "切换到夜间模式",
+  "themeToggleSwitchToLight": "切换到白天模式",
+  "themeToggleLabelDark": "夜间",
+  "themeToggleLabelLight": "日间"
 }
 

@@ -145,11 +145,11 @@ class _ContactScreenState extends State<ContactScreen> {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemePalette.surface(context),
         borderRadius: BorderRadius.circular(24),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withAlpha(8),
+            color: AppThemePalette.shadow(context),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -215,21 +215,23 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget _buildSectionTitle({required String title, required String subtitle}) {
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+            color: titleColor,
           ),
         ),
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 14, color: subtitleColor),
         ),
       ],
     );
@@ -289,13 +291,13 @@ class _ContactScreenState extends State<ContactScreen> {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemePalette.surface(context),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppThemePalette.border(context)),
       ),
       child: Text(
         message,
-        style: const TextStyle(color: AppColors.textSecondary),
+        style: TextStyle(color: AppThemePalette.textSecondary(context)),
       ),
     );
   }
@@ -305,29 +307,29 @@ class _ContactScreenState extends State<ContactScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemePalette.surface(context),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppThemePalette.border(context)),
       ),
       child: Column(
         children: <Widget>[
           Icon(
             Icons.manage_search_rounded,
             size: 40,
-            color: AppColors.textHint,
+            color: AppThemePalette.textHint(context),
           ),
           const SizedBox(height: 12),
           Text(
             l10n.contactsNoContactsMatched,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: AppThemePalette.textPrimary(context),
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             l10n.contactsTryAnotherKeyword,
-            style: const TextStyle(color: AppColors.textSecondary),
+            style: TextStyle(color: AppThemePalette.textSecondary(context)),
           ),
         ],
       ),
@@ -346,12 +348,12 @@ class _OnlineUserCard extends StatelessWidget {
       width: 172,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemePalette.surface(context),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppThemePalette.border(context)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withAlpha(8),
+            color: AppThemePalette.shadow(context),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -397,10 +399,10 @@ class _OnlineUserCard extends StatelessWidget {
                   user.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
+                    color: AppThemePalette.textPrimary(context),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -408,9 +410,9 @@ class _OnlineUserCard extends StatelessWidget {
                   user.department,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
+                    color: AppThemePalette.textSecondary(context),
                   ),
                 ),
               ],
@@ -433,12 +435,12 @@ class _ContactCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemePalette.surface(context),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppThemePalette.border(context)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withAlpha(7),
+            color: AppThemePalette.shadow(context),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -468,10 +470,10 @@ class _ContactCard extends StatelessWidget {
                       child: Text(
                         user.name,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
+                          color: AppThemePalette.textPrimary(context),
                         ),
                       ),
                     ),
@@ -505,8 +507,8 @@ class _ContactCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   user.department,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
+                  style: TextStyle(
+                    color: AppThemePalette.textSecondary(context),
                     fontWeight: FontWeight.w600,
                   ),
                 ),

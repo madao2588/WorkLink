@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Generic, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 T = TypeVar('T')
 
@@ -18,6 +18,7 @@ class UserInfo(BaseModel):
     id: str
     name: str
     avatar: str
+    loginId: str | None = None
     department: str
     departmentId: str | None = None
     position: str
@@ -25,6 +26,8 @@ class UserInfo(BaseModel):
     employeeNo: str
     email: str | None = None
     mobileMasked: str | None = None
+    role: str | None = None
+    permissions: list[str] = Field(default_factory=list)
 
 
 class AuthTokens(BaseModel):

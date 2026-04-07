@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/profile/domain/models/badge_item.dart';
 import 'package:my_first_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class BadgesScreen extends StatefulWidget {
   const BadgesScreen({super.key});
@@ -27,11 +28,12 @@ class _BadgesScreenState extends State<BadgesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final ProfileProvider profile = context.watch<ProfileProvider>();
     final List<BadgeItem> badges = profile.badges;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('我的勋章')),
+      appBar: AppBar(title: Text(l10n.badgesTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         children: <Widget>[
@@ -44,8 +46,8 @@ class _BadgesScreenState extends State<BadgesScreen> {
             ),
             child: Text(
               badges.isEmpty
-                  ? '勋章数据会从后端个人中心接口加载。'
-                  : '当前已同步 ${badges.length} 枚勋章，记录你在协作中的阶段成果。',
+                  ? l10n.badgesIntroEmpty
+                  : l10n.badgesIntroCount(badges.length),
               style: const TextStyle(
                 color: AppColors.textSecondary,
                 height: 1.5,
@@ -61,7 +63,7 @@ class _BadgesScreenState extends State<BadgesScreen> {
           else if (profile.badgesError != null)
             _buildMessageCard(profile.badgesError!)
           else if (badges.isEmpty)
-            _buildMessageCard('暂无勋章数据')
+            _buildMessageCard(l10n.badgesEmpty)
           else
             GridView.builder(
               shrinkWrap: true,

@@ -5,9 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:my_first_app/app/router/app_router.dart';
 import 'package:my_first_app/app/shared/widgets/app_dashboard_hero.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
+import 'package:my_first_app/features/enterprise_admin/domain/models/enterprise_admin_models.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/providers/enterprise_admin_provider.dart';
 import 'package:my_first_app/features/auth/presentation/providers/user_provider.dart';
 import 'package:my_first_app/features/profile/domain/models/profile_overview.dart';
 import 'package:my_first_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -27,11 +30,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final UserProvider userProvider = context.watch<UserProvider>();
     final ProfileProvider profile = context.watch<ProfileProvider>();
+    final EnterpriseAdminProvider enterpriseAdmin =
+        context.watch<EnterpriseAdminProvider>();
 
     if (userProvider.currentUser == null) {
-      return const Scaffold(body: Center(child: Text('请重新登录')));
+      return Scaffold(body: Center(child: Text(l10n.profilePleaseRelogin)));
     }
 
     return Scaffold(
@@ -49,12 +55,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const _ProfileLoadingState()
                     else if (profile.overview == null)
                       _ProfileErrorState(
-                        message: profile.overviewError ?? '个人数据加载失败',
+                        message:
+                            profile.overviewError ?? l10n.profileOverviewLoadFailed,
                         onRetry: () =>
                             context.read<ProfileProvider>().loadOverview(),
                       )
                     else
-                      ..._buildContent(context, profile.overview!),
+                      ..._buildContent(
+                        context,
+                        profile.overview!,
+                        l10n,
+                        enterpriseAdmin,
+                      ),
                   ],
                 ),
               ),
@@ -65,56 +77,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  List<Widget> _buildContent(BuildContext context, ProfileOverview overview) {
+  List<Widget> _buildContent(
+    BuildContext context,
+    ProfileOverview overview,
+    AppLocalizations l10n,
+    EnterpriseAdminProvider enterpriseAdmin,
+  ) {
     final List<_ProfileMetric> metrics = <_ProfileMetric>[
       _ProfileMetric(
-        label: '出勤状态',
-        value: _attendanceLabel(overview.attendanceStatus),
+        label: l10n.profileMetricAttendanceLabel,
+        value: _attendanceLabel(overview.attendanceStatus, l10n),
         caption: overview.checkInTime == null
-            ? '今日尚未打卡'
-            : _timeLabel(overview.checkInTime!),
+            ? l10n.profileMetricAttendanceCaptionNotCheckedIn
+            : _timeLabel(overview.checkInTime!, l10n),
         accent: overview.hasCheckedIn ? AppColors.success : AppColors.warning,
       ),
       _ProfileMetric(
-        label: '待审批',
+        label: l10n.profileMetricPendingApprovalsLabel,
         value: '${overview.pendingApprovalCount}',
-        caption: '待你跟进的流程事项',
+        caption: l10n.profileMetricPendingApprovalsCaption,
         accent: AppColors.info,
       ),
       _ProfileMetric(
-        label: '消息记录',
+        label: l10n.profileMetricMessagesLabel,
         value: '${overview.totalMessageCount}',
-        caption: '未读 ${overview.unreadMessageCount} 条',
+        caption: l10n.profileMetricMessagesCaption(
+          overview.unreadMessageCount,
+        ),
         accent: AppColors.brandBlue,
       ),
     ];
 
     return <Widget>[
-      _buildProfileHero(overview),
+      _buildProfileHero(overview, l10n),
       const SizedBox(height: 20),
       _buildMetricsGrid(metrics),
+      if (_canAccessEnterpriseAdmin(enterpriseAdmin)) ...<Widget>[
+        const SizedBox(height: 24),
+        _buildSectionTitle(
+          title: l10n.profileSectionManagementTitle,
+          subtitle: l10n.profileSectionManagementSubtitle,
+        ),
+        const SizedBox(height: 14),
+        _buildActionGroup(
+          context,
+          title: l10n.profileSectionManagementTitle,
+          actions: <_ProfileAction>[
+            _ProfileAction(
+              id: 'enterprise-admin',
+              title: l10n.profileActionEnterpriseAdminTitle,
+              subtitle: l10n.profileActionEnterpriseAdminSubtitle(
+                enterpriseAdmin.currentRoleLabel(l10n),
+              ),
+              icon: Icons.admin_panel_settings_outlined,
+              iconColor: AppColors.info,
+            ),
+          ],
+        ),
+      ],
       const SizedBox(height: 24),
-      _buildSectionTitle(title: '个人工作台', subtitle: '把常用入口整理成更容易查找的分组'),
+      _buildSectionTitle(
+        title: l10n.profileSectionWorkspaceTitle,
+        subtitle: l10n.profileSectionWorkspaceSubtitle,
+      ),
       const SizedBox(height: 14),
       _buildActionGroup(
         context,
-        title: '个人事务',
-        actions: const <_ProfileAction>[
+        title: l10n.profileSectionPersonalTitle,
+        actions: <_ProfileAction>[
           _ProfileAction(
-            title: '我的审批',
-            subtitle: '查看申请记录与审批流转',
+            id: 'my-approvals',
+            title: l10n.profileActionMyApprovalsTitle,
+            subtitle: l10n.profileActionMyApprovalsSubtitle,
             icon: Icons.fact_check_outlined,
             iconColor: AppColors.brandBlue,
           ),
           _ProfileAction(
-            title: '工资条',
-            subtitle: '查看薪资相关信息入口',
+            id: 'salary-slips',
+            title: l10n.profileActionSalarySlipsTitle,
+            subtitle: l10n.profileActionSalarySlipsSubtitle,
             icon: Icons.account_balance_wallet_outlined,
             iconColor: AppColors.warning,
           ),
           _ProfileAction(
-            title: '我的勋章',
-            subtitle: '沉淀阶段成果与荣誉记录',
+            id: 'badges',
+            title: l10n.profileActionBadgesTitle,
+            subtitle: l10n.profileActionBadgesSubtitle,
             icon: Icons.workspace_premium_outlined,
             iconColor: Color(0xFF8B5CF6),
           ),
@@ -123,50 +171,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
       const SizedBox(height: 18),
       _buildActionGroup(
         context,
-        title: '系统设置',
-        actions: const <_ProfileAction>[
+        title: l10n.profileSectionSettingsTitle,
+        actions: <_ProfileAction>[
           _ProfileAction(
-            title: '账号与安全',
-            subtitle: '登录设备、隐私和安全设置',
+            id: 'account-security',
+            title: l10n.profileActionAccountSecurityTitle,
+            subtitle: l10n.profileActionAccountSecuritySubtitle,
             icon: Icons.shield_outlined,
             iconColor: AppColors.success,
           ),
           _ProfileAction(
-            title: '通用设置',
-            subtitle: '通知、显示和常用偏好',
+            id: 'general-settings',
+            title: l10n.profileActionGeneralSettingsTitle,
+            subtitle: l10n.profileActionGeneralSettingsSubtitle,
             icon: Icons.tune_rounded,
             iconColor: AppColors.textSecondary,
           ),
           _ProfileAction(
-            title: '帮助与反馈',
-            subtitle: '提交问题或获取使用帮助',
+            id: 'help-feedback',
+            title: l10n.profileActionHelpFeedbackTitle,
+            subtitle: l10n.profileActionHelpFeedbackSubtitle,
             icon: Icons.support_agent_rounded,
             iconColor: AppColors.info,
           ),
         ],
       ),
       const SizedBox(height: 22),
-      _buildLogoutButton(context),
+      _buildLogoutButton(context, l10n),
     ];
   }
 
-  Widget _buildProfileHero(ProfileOverview overview) {
+  bool _canAccessEnterpriseAdmin(EnterpriseAdminProvider enterpriseAdmin) {
+    return enterpriseAdmin.hasPermission(AdminPermission.manageEmployees) ||
+        enterpriseAdmin.hasPermission(AdminPermission.manageDepartments) ||
+        enterpriseAdmin.hasPermission(AdminPermission.managePositions) ||
+        enterpriseAdmin.hasPermission(AdminPermission.manageAccounts) ||
+        enterpriseAdmin.hasPermission(AdminPermission.exportData);
+  }
+
+  Widget _buildProfileHero(ProfileOverview overview, AppLocalizations l10n) {
     return AppDashboardHero(
       title: overview.user.name,
       subtitle: overview.user.department,
-      badgeText: overview.user.isOnline ? '在线办公中' : '已认证账号',
+      badgeText: overview.user.isOnline
+          ? l10n.profileHeroOnline
+          : l10n.profileHeroVerified,
       icon: Icons.account_circle_rounded,
       stats: <AppDashboardHeroStat>[
         AppDashboardHeroStat(
-          label: '出勤状态',
-          value: _attendanceLabel(overview.attendanceStatus),
+          label: l10n.profileMetricAttendanceLabel,
+          value: _attendanceLabel(overview.attendanceStatus, l10n),
         ),
         AppDashboardHeroStat(
-          label: '待审批',
+          label: l10n.profileMetricPendingApprovalsLabel,
           value: '${overview.pendingApprovalCount}',
         ),
         AppDashboardHeroStat(
-          label: '未读消息',
+          label: l10n.profileHeroUnreadMessagesLabel,
           value: '${overview.unreadMessageCount}',
         ),
       ],
@@ -211,15 +272,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildMetricCard(_ProfileMetric metric) {
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
+    final Color hintColor = AppThemePalette.textHint(context);
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: borderColor),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withAlpha(7),
+            color: AppThemePalette.shadow(context),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -239,28 +305,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 16),
           Text(
             metric.value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
+              color: titleColor,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             metric.label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
-              color: AppColors.textSecondary,
+              color: subtitleColor,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             metric.caption,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               height: 1.45,
-              color: AppColors.textHint,
+              color: hintColor,
             ),
           ),
         ],
@@ -269,21 +335,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildSectionTitle({required String title, required String subtitle}) {
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+            color: titleColor,
           ),
         ),
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 14, color: subtitleColor),
         ),
       ],
     );
@@ -294,15 +362,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String title,
     required List<_ProfileAction> actions,
   }) {
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color titleColor = AppThemePalette.textPrimary(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: borderColor),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withAlpha(7),
+            color: AppThemePalette.shadow(context),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -316,10 +387,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: <Widget>[
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
+                    color: titleColor,
                   ),
                 ),
               ],
@@ -328,7 +399,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ...actions.map(
             (_ProfileAction action) => _ProfileActionTile(
               action: action,
-              onTap: () => _handleActionTap(context, action.title),
+              onTap: () => _handleActionTap(context, action.id, action.title),
             ),
           ),
         ],
@@ -336,75 +407,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
+  Widget _buildLogoutButton(BuildContext context, AppLocalizations l10n) {
+    final bool darkMode = AppThemePalette.isDark(context);
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton(
         onPressed: () => _showLogoutDialog(context),
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.danger,
-          side: const BorderSide(color: Color(0xFFF0C4BF)),
-          backgroundColor: const Color(0xFFFFF6F5),
+          side: BorderSide(
+            color: darkMode ? const Color(0xFF734049) : const Color(0xFFF0C4BF),
+          ),
+          backgroundColor: darkMode
+              ? const Color(0xFF25161B)
+              : const Color(0xFFFFF6F5),
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
           ),
         ),
-        child: const Text(
-          '退出登录',
-          style: TextStyle(fontWeight: FontWeight.w800),
+        child: Text(
+          l10n.profileLogoutButton,
+          style: const TextStyle(fontWeight: FontWeight.w800),
         ),
       ),
     );
   }
 
-  void _handleActionTap(BuildContext context, String title) {
-    switch (title) {
-      case '我的审批':
+  void _handleActionTap(BuildContext context, String actionId, String title) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    switch (actionId) {
+      case 'my-approvals':
         context.pushNamed(AppRoutes.approval);
         return;
-      case '工资条':
+      case 'salary-slips':
         context.pushNamed(AppRoutes.salarySlips);
         return;
-      case '我的勋章':
+      case 'badges':
         context.pushNamed(AppRoutes.badges);
         return;
-      case '账号与安全':
+      case 'account-security':
         context.pushNamed(AppRoutes.accountSecurity);
         return;
-      case '通用设置':
+      case 'general-settings':
         context.pushNamed(AppRoutes.generalSettings);
         return;
-      case '帮助与反馈':
+      case 'help-feedback':
         context.pushNamed(AppRoutes.helpFeedback);
+        return;
+      case 'enterprise-admin':
+        context.pushNamed(AppRoutes.enterpriseAdmin);
         return;
       default:
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('$title 功能正在完善中')));
+        ).showSnackBar(
+          SnackBar(content: Text(l10n.profileActionComingSoon(title))),
+        );
         return;
     }
   }
 
   void _showLogoutDialog(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('退出登录'),
-          content: const Text('确定要退出当前账号吗？'),
+          title: Text(l10n.profileLogoutDialogTitle),
+          content: Text(l10n.profileLogoutDialogContent),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('取消'),
+              child: Text(l10n.profileDialogCancel),
             ),
             TextButton(
               onPressed: () {
                 context.read<UserProvider>().logout();
                 Navigator.pop(dialogContext);
               },
-              child: const Text(
-                '退出',
+              child: Text(
+                l10n.profileDialogConfirmLogout,
                 style: TextStyle(color: AppColors.danger),
               ),
             ),
@@ -414,23 +497,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  String _attendanceLabel(String status) {
+  String _attendanceLabel(String status, AppLocalizations l10n) {
     switch (status) {
       case 'CHECKED_IN':
       case 'ON_TIME':
-        return '已打卡';
+        return l10n.profileAttendanceCheckedIn;
       case 'LATE':
-        return '迟到';
+        return l10n.profileAttendanceLate;
       case 'NOT_CHECKED_IN':
       default:
-        return '待打卡';
+        return l10n.profileAttendancePending;
     }
   }
 
-  String _timeLabel(DateTime time) {
+  String _timeLabel(DateTime time, AppLocalizations l10n) {
     final String hour = time.hour.toString().padLeft(2, '0');
     final String minute = time.minute.toString().padLeft(2, '0');
-    return '签到时间 $hour:$minute';
+    return l10n.profileCheckInTimeLabel('$hour:$minute');
   }
 }
 
@@ -446,9 +529,9 @@ class _ProfileLoadingState extends StatelessWidget {
           margin: EdgeInsets.only(bottom: index == 2 ? 0 : 14),
           height: index == 0 ? 220 : 96,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppThemePalette.surface(context),
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: AppThemePalette.border(context)),
           ),
         ),
       ),
@@ -464,12 +547,13 @@ class _ProfileErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemePalette.surface(context),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppThemePalette.border(context)),
       ),
       child: Column(
         children: <Widget>[
@@ -482,10 +566,13 @@ class _ProfileErrorState extends StatelessWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.textSecondary, height: 1.5),
+            style: TextStyle(
+              color: AppThemePalette.textSecondary(context),
+              height: 1.5,
+            ),
           ),
           const SizedBox(height: 16),
-          FilledButton(onPressed: onRetry, child: const Text('重新加载')),
+          FilledButton(onPressed: onRetry, child: Text(l10n.profileReload)),
         ],
       ),
     );
@@ -500,6 +587,9 @@ class _ProfileActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
+    final Color hintColor = AppThemePalette.textHint(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -525,18 +615,18 @@ class _ProfileActionTile extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       action.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                        color: titleColor,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       action.subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: subtitleColor,
                         height: 1.45,
                       ),
                     ),
@@ -544,9 +634,9 @@ class _ProfileActionTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              const Icon(
+              Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.textHint,
+                color: hintColor,
               ),
             ],
           ),
@@ -572,12 +662,14 @@ class _ProfileMetric {
 
 class _ProfileAction {
   const _ProfileAction({
+    required this.id,
     required this.title,
     required this.subtitle,
     required this.icon,
     required this.iconColor,
   });
 
+  final String id;
   final String title;
   final String subtitle;
   final IconData icon;

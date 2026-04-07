@@ -29,6 +29,669 @@
   "contactsOnline": "Online",
   "contactsOffline": "Offline",
 
+  "routerRecoveryFailedTitle": "Page recovery failed",
+  "routerReturnToApp": "Return to app",
+
+  "workplaceFallbackUserName": "Colleague",
+  "workplaceDateFormat": "MMMd",
+  "workplaceHeroSubtitle": "{dateLabel} · Move one more important task forward today",
+  "workplaceHeroStatCheckedIn": "Checked in",
+  "workplaceHeroStatPendingCheckIn": "Pending",
+  "workplaceHeroStatLate": "Late",
+  "workplaceHeroStatMissing": "Missing",
+  "workplaceSectionCommandTitle": "Command desk",
+  "workplaceSectionCommandSubtitle": "Start with the move that reduces the most friction in today's work",
+  "workplaceSectionOverviewTitle": "Today's overview",
+  "workplaceSectionOverviewSubtitle": "See the most important status in one place",
+  "workplaceSectionActionsTitle": "Frequent actions",
+  "workplaceSectionActionsSubtitle": "Keep the most common work actions close at hand",
+  "workplaceSectionFocusTitle": "Needs attention",
+  "workplaceSectionFocusSubtitle": "Start with the items that most affect today’s momentum",
+  "workplaceSectionPulseTitle": "System pulse",
+  "workplaceSectionPulseSubtitle": "Quickly verify whether the core modules are syncing normally",
+  "workplaceSectionUpdatesTitle": "Updates and rhythm",
+  "workplaceSectionUpdatesSubtitle": "Use announcements and recent activity to regain context after opening the app",
+  "workplaceSectionAnnouncementsTitle": "Announcements",
+  "workplaceSectionAnnouncementsSubtitle": "A few operational updates worth checking before work gets busy",
+  "workplaceSectionAnnouncementsTimelineTitle": "Recent activity",
+  "workplaceSectionAnnouncementsTimelineSubtitle": "Today's approvals, check-in, and conversations in one short timeline",
+  "workplaceCommandRecommendedLabel": "Recommended next step",
+  "workplaceCommandQueueLabel": "Current queue",
+  "workplaceCommandQueueSubtitle": "A compact view of what still needs action across the three main work streams",
+  "workplaceMetricStatusLabel": "Today's status",
+  "workplaceMetricStatusHintCheckedIn": "Status synced",
+  "workplaceMetricStatusHintPending": "Check-in pending",
+  "workplaceMetricCheckInLabel": "Check-in time",
+  "workplaceMetricCheckInHintRecorded": "Recorded",
+  "workplaceMetricCheckInHintNotYet": "Not checked in yet",
+  "workplaceMetricPendingApprovalsLabel": "Pending approvals",
+  "workplaceMetricPendingApprovalsHint": "Flows that need follow-up",
+  "workplaceMetricUnreadMessagesLabel": "Unread messages",
+  "workplaceMetricUnreadMessagesHint": "{count} colleagues online · Prioritize unread items",
+  "workplaceActionAttendanceTitle": "Attendance",
+  "workplaceActionAttendanceSubtitle": "Quickly record today's arrival status",
+  "workplaceActionApprovalTitle": "Approvals",
+  "workplaceActionApprovalSubtitle": "Review and handle pending requests",
+  "workplaceActionLogTitle": "Work log",
+  "workplaceActionLogSubtitle": "Capture progress and keep the team aligned",
+  "workplaceActionNoticeTitle": "Announcements",
+  "workplaceActionNoticeSubtitle": "Read team updates and policy changes",
+  "workplaceGreetingMorning": "Good morning",
+  "workplaceGreetingAfternoon": "Good afternoon",
+  "workplaceGreetingEvening": "Good evening",
+  "workplaceNotCheckedInValue": "Not checked in",
+  "workplaceActionEnterNow": "Open now",
+  "workplaceSnackBarAlreadyCheckedIn": "Today's check-in is already complete",
+  "workplaceSnackBarCheckInSuccess": "Check-in succeeded and status was updated",
+  "workplaceSnackBarLogReady": "Recent activity is already visible in the timeline below",
+  "workplaceSnackBarNoticeReady": "Announcements are already available in the panel below",
+  "workplacePriorityAttendanceTitle": "Today's attendance",
+  "workplacePriorityAttendancePendingSummary": "Today's check-in has not been completed yet",
+  "workplacePriorityAttendancePendingDetail": "It is better to finish check-in before moving on to other work",
+  "workplacePriorityAttendanceDoneSummary": "Attendance has been recorded for today",
+  "workplacePriorityAttendanceDoneDetail": "Checked in at {time}",
+  "workplacePriorityApprovalsTitle": "Approval follow-up",
+  "workplacePriorityApprovalsNoneSummary": "There are no approvals waiting right now",
+  "workplacePriorityApprovalsNoneDetail": "You can move on to other work while the approval queue stays clear",
+  "workplacePriorityApprovalsPendingSummary": "{count} approvals still need your action",
+  "workplacePriorityApprovalsPendingDetail": "{approvedCount} approved · {rejectedCount} rejected",
+  "workplacePriorityMessagesTitle": "Message handling",
+  "workplacePriorityMessagesUnreadSummary": "{count} conversations still have unread items",
+  "workplacePriorityMessagesUnreadDetail": "{onlineCount} colleagues are online and ready for quick collaboration",
+  "workplacePriorityMessagesClearSummary": "The message queue is under control",
+  "workplacePriorityMessagesClearDetail": "{onlineCount} colleagues are online and there is no unread pressure right now",
+  "workplacePriorityLevelCritical": "Critical",
+  "workplacePriorityLevelHigh": "High",
+  "workplacePriorityLevelSteady": "Steady",
+  "workplacePulseAttendanceLabel": "Attendance API",
+  "workplacePulseApprovalsLabel": "Approval API",
+  "workplacePulseMessagesLabel": "Message API",
+  "workplacePulseStateLoading": "Syncing",
+  "workplacePulseStateHealthy": "Ready",
+  "workplacePulseStateError": "Error",
+  "workplacePulseDetailHealthy": "Data is ready",
+  "workplacePulseDetailLoading": "Fetching the latest status",
+  "workplaceAnnouncementTagPolicy": "Policy",
+  "workplaceAnnouncementTagReminder": "Reminder",
+  "workplaceAnnouncementTagCollaboration": "Collaboration",
+  "workplaceAnnouncementApprovalPolicyTitle": "Approval SLA reminder refreshed",
+  "workplaceAnnouncementApprovalPolicyDetail": "Requests submitted before 18:00 should be reviewed on the same day whenever possible.",
+  "workplaceAnnouncementAttendanceTitle": "Attendance exceptions are now highlighted first",
+  "workplaceAnnouncementAttendanceDetail": "Late arrival and missing check-in states now stay visible on the workspace until handled.",
+  "workplaceAnnouncementCollaborationTitle": "Unread conversations are prioritized in collaboration",
+  "workplaceAnnouncementCollaborationDetail": "Keep urgent chats moving by reviewing unread threads before starting deep work.",
+  "workplaceAnnouncementAction": "View from workspace",
+  "workplaceTimelineAttendanceDoneTitle": "Attendance recorded",
+  "workplaceTimelineAttendanceDoneDetail": "Checked in at {time}",
+  "workplaceTimelineAttendancePendingTitle": "Attendance still needs action",
+  "workplaceTimelineAttendancePendingDetail": "Today's check-in is still pending and should be completed first.",
+  "workplaceTimelineApprovalTitle": "{applicant} submitted an approval",
+  "workplaceTimelineApprovalPendingDetail": "Waiting for follow-up: {title}",
+  "workplaceTimelineApprovalApprovedDetail": "Approved and archived: {title}",
+  "workplaceTimelineApprovalRejectedDetail": "Sent back for revision: {title}",
+  "workplaceTimelineMessageTitle": "Conversation updated with {name}",
+  "workplaceTimelineMessageUnreadDetail": "{preview} - {count} unread",
+  "workplaceTimelineMessageReadDetail": "{preview}",
+  "workplaceTimelineTagAttendance": "Attendance",
+  "workplaceTimelineTagAttention": "Attention",
+  "workplaceTimelineTagPending": "Pending",
+  "workplaceTimelineTagApproved": "Approved",
+  "workplaceTimelineTagRejected": "Rejected",
+  "workplaceTimelineTagUnread": "Unread",
+  "workplaceTimelineTagUpdated": "Updated",
+  "workplaceTimelineEmptyState": "Recent approvals, check-ins, and messages will show up here once data syncs in.",
+  "workplaceTimelineTimeToday": "Today {time}",
+
+  "profilePleaseRelogin": "Please sign in again",
+  "profileOverviewLoadFailed": "Failed to load profile data",
+  "profileMetricAttendanceLabel": "Attendance",
+  "profileMetricAttendanceCaptionNotCheckedIn": "Not checked in today",
+  "profileMetricPendingApprovalsLabel": "Pending approvals",
+  "profileMetricPendingApprovalsCaption": "Items that still need your follow-up",
+  "profileMetricMessagesLabel": "Messages",
+  "profileMetricMessagesCaption": "{count} unread",
+  "profileSectionManagementTitle": "Management",
+  "profileSectionManagementSubtitle": "Expose admin tools only for roles that should actually see them",
+  "profileSectionWorkspaceTitle": "Personal workspace",
+  "profileSectionWorkspaceSubtitle": "Group common entries so they are easier to find",
+  "profileSectionPersonalTitle": "Personal tasks",
+  "profileActionMyApprovalsTitle": "My approvals",
+  "profileActionMyApprovalsSubtitle": "Review requests and approval progress",
+  "profileActionSalarySlipsTitle": "Salary slips",
+  "profileActionSalarySlipsSubtitle": "Access payroll-related information",
+  "profileActionBadgesTitle": "My badges",
+  "profileActionBadgesSubtitle": "Track milestones and recognition",
+  "profileActionEnterpriseAdminTitle": "Enterprise admin",
+  "profileActionEnterpriseAdminSubtitle": "Current role: {role}",
+  "profileSectionSettingsTitle": "System settings",
+  "profileActionAccountSecurityTitle": "Account & security",
+  "profileActionAccountSecuritySubtitle": "Devices, privacy, and security settings",
+  "profileActionGeneralSettingsTitle": "General settings",
+  "profileActionGeneralSettingsSubtitle": "Notifications, display, and preferences",
+  "profileActionHelpFeedbackTitle": "Help & feedback",
+  "profileActionHelpFeedbackSubtitle": "Report issues or get help",
+  "profileHeroOnline": "Working online",
+  "profileHeroVerified": "Verified account",
+  "profileHeroUnreadMessagesLabel": "Unread messages",
+  "profileLogoutButton": "Sign out",
+  "profileActionComingSoon": "{title} is still being improved",
+  "profileLogoutDialogTitle": "Sign out",
+  "profileLogoutDialogContent": "Are you sure you want to sign out of this account?",
+  "profileDialogCancel": "Cancel",
+  "profileDialogConfirmLogout": "Sign out",
+  "profileAttendanceCheckedIn": "Checked in",
+  "profileAttendanceLate": "Late",
+  "profileAttendancePending": "Pending",
+  "profileCheckInTimeLabel": "Check-in time {time}",
+  "profileReload": "Reload",
+
+  "salarySlipsTitle": "Salary slips",
+  "salarySlipsRecentTitle": "Recent salary records",
+  "salarySlipsEmpty": "No salary slips yet",
+  "salarySlipsSummaryWaiting": "Waiting for the backend salary slip response",
+  "salarySlipsSummaryLatest": "The latest period is {month}, now synced from the backend salary API.",
+  "salarySlipsSummaryCurrentNet": "Net pay this month",
+  "salarySlipsNetPayLabel": "Net pay",
+  "salarySlipsGrossPayLabel": "Gross pay",
+  "salarySlipsIssuedAtLabel": "Issued at",
+
+  "badgesTitle": "My badges",
+  "badgesIntroEmpty": "Badge data will be loaded from the backend profile API.",
+  "badgesIntroCount": "{count} badges are currently synced, capturing your collaboration milestones.",
+  "badgesEmpty": "No badges yet",
+
+  "accountSecurityTitle": "Account & security",
+  "accountSecurityIntroEmpty": "Account security information will be loaded from the backend security API.",
+  "accountSecurityIntroLoaded": "Binding methods, device information, and security policies are synced for centralized sign-in safety.",
+  "accountSecurityEmpty": "No account security data yet",
+  "accountSecuritySectionAccountInfo": "Account information",
+  "accountSecurityLabelMobile": "Bound mobile",
+  "accountSecurityLabelEmail": "Bound email",
+  "accountSecurityLabelPasswordUpdatedAt": "Password updated",
+  "accountSecurityLabelMfa": "Multi-factor authentication",
+  "accountSecurityMfaEnabled": "Enabled",
+  "accountSecurityMfaDisabled": "Disabled",
+  "accountSecuritySectionRecentDevices": "Recent sign-in devices",
+  "accountSecurityCurrentDevice": "Current device",
+
+  "generalSettingsTitle": "General settings",
+  "generalSettingsEmpty": "No settings data yet",
+  "generalSettingsSectionNotifications": "Notification preferences",
+  "generalSettingsPushTitle": "Push notifications",
+  "generalSettingsPushSubtitle": "Get alerts for chats and approvals",
+  "generalSettingsSoundTitle": "Sound alerts",
+  "generalSettingsSoundSubtitle": "Allow audio feedback and system prompts",
+  "generalSettingsSectionDisplay": "Display & preferences",
+  "generalSettingsLanguageTitle": "Language",
+  "generalSettingsLanguageSubtitle": "Choose the interface language",
+  "generalSettingsLanguageZhHans": "Simplified Chinese",
+  "generalSettingsThemeTitle": "Theme",
+  "generalSettingsThemeSubtitle": "The backend has saved the current theme mode",
+  "generalSettingsThemeLight": "Light",
+  "generalSettingsThemeDark": "Dark",
+  "generalSettingsSectionOther": "Other",
+  "generalSettingsCacheSizeTitle": "Cache size",
+  "generalSettingsVersionTitle": "Current version",
+  "generalSettingsVersionValue": "WorkLink 1.0.0",
+
+  "helpFeedbackTitle": "Help & feedback",
+  "helpFeedbackIntro": "This page can now submit feedback to the backend for future ticketing, email routing, or admin workflows.",
+  "helpFeedbackFaqMessagesTitle": "Why aren't messages refreshing?",
+  "helpFeedbackFaqMessagesAnswer": "First confirm the local backend is running. Messages and profile data already rely on real APIs.",
+  "helpFeedbackFaqApprovalTitle": "Where can I find submitted approvals?",
+  "helpFeedbackFaqApprovalAnswer": "Open the approval center from My Approvals or the workplace entry to see the latest records.",
+  "helpFeedbackFaqLoginTitle": "What should I do if sign-in fails?",
+  "helpFeedbackFaqLoginAnswer": "Confirm the backend service is healthy, then verify the demo account zhangsan / 123456 is still available.",
+  "helpFeedbackSubmitSectionTitle": "Submit feedback",
+  "helpFeedbackCategoryFeature": "Feature idea",
+  "helpFeedbackCategoryUi": "UI experience",
+  "helpFeedbackCategoryBug": "Bug report",
+  "helpFeedbackInputHint": "Describe your issue or suggestion. It will be saved through the backend feedback API after submission.",
+  "helpFeedbackSubmitting": "Submitting...",
+  "helpFeedbackSubmitButton": "Submit feedback",
+  "helpFeedbackEmptyContent": "Please enter your feedback first",
+  "helpFeedbackSubmitSuccess": "Feedback was submitted to the backend",
+
+  "approvalTitle": "My approvals",
+  "approvalEmpty": "No requests yet",
+  "approvalReasonLabel": "Reason: {reason}",
+  "approvalSubmittedAtLabel": "Submitted at: {time}",
+  "approvalStatusPending": "In review",
+  "approvalStatusApproved": "Approved",
+  "approvalStatusRejected": "Rejected",
+  "approvalDecisionTitle": "Approval decision",
+  "approvalApproveAction": "Approve request",
+  "approvalRejectAction": "Reject request",
+  "approvalSubmitDialogTitle": "Start request",
+  "approvalSubmitDialogHint": "Enter the request reason (for example: sick leave)",
+  "approvalDialogCancel": "Cancel",
+  "approvalDialogSubmit": "Submit",
+
+  "enterpriseAdminPermissionEmployees": "The current account cannot manage employee records",
+  "enterpriseAdminPermissionDepartments": "The current account cannot manage departments",
+  "enterpriseAdminPermissionPositions": "The current account cannot manage positions",
+  "enterpriseAdminPermissionAccounts": "The current account cannot configure account permissions",
+  "enterpriseAdminPermissionExport": "The current account cannot export Excel files",
+  "enterpriseAdminPermissionDashboard": "The current account cannot view the dashboard",
+  "enterpriseAdminTitle": "Enterprise admin",
+  "enterpriseAdminSubtitle": "Use role-aware access to review organization data, headcount, and management capabilities.",
+  "enterpriseAdminRoleChip": "Role: {role}",
+  "enterpriseAdminSessionChip": "Session: {name}",
+  "enterpriseAdminFilterAll": "All",
+  "enterpriseAdminDataSourceChipLive": "Directory: live backend",
+  "enterpriseAdminDataSourceChipFallback": "Directory: demo fallback",
+  "enterpriseAdminDataSourceChipLoading": "Directory: syncing",
+  "enterpriseAdminSectionOverviewTitle": "Overview",
+  "enterpriseAdminSectionOverviewSubtitle": "A lightweight management snapshot to make the current scope visible",
+  "enterpriseAdminSectionModulesTitle": "Modules",
+  "enterpriseAdminSectionModulesSubtitle": "Each management domain now reflects the current role's reachable capability",
+  "enterpriseAdminSectionActionsTitle": "Action center",
+  "enterpriseAdminSectionActionsSubtitle": "Use the current permission set to sync data or export management snapshots",
+  "enterpriseAdminSectionPreviewTitle": "Data preview",
+  "enterpriseAdminSectionPreviewSubtitle": "Open lightweight read-only details for the management domains your current role can actually inspect",
+  "enterpriseAdminSectionPermissionsTitle": "Permission summary",
+  "enterpriseAdminSectionPermissionsSubtitle": "A quick list of what this account can and cannot manage right now",
+  "enterpriseAdminDataSourceLiveTitle": "Enterprise admin data is synced from the backend",
+  "enterpriseAdminDataSourceLiveSubtitle": "Employees, departments, positions, and account summaries now come from the backend overview API.",
+  "enterpriseAdminDataSourceLoadingTitle": "Syncing organization data",
+  "enterpriseAdminDataSourceLoadingSubtitle": "The enterprise admin page is fetching the latest employees, departments, positions, and accounts from the backend.",
+  "enterpriseAdminDataSourceFallbackTitle": "Enterprise admin data is temporarily using demo data",
+  "enterpriseAdminDataSourceFallbackSubtitle": "The backend overview API did not return successfully, so the page fell back to local sample data for now.",
+  "enterpriseAdminRetrySync": "Retry sync",
+  "enterpriseAdminActionSyncNow": "Sync now",
+  "enterpriseAdminActionChangeCenter": "Change center",
+  "enterpriseAdminActionExportEmployees": "Export employees",
+  "enterpriseAdminActionExportDepartments": "Export departments",
+  "enterpriseAdminActionExportPositions": "Export positions",
+  "enterpriseAdminActionExportReady": "Export is available for this account. The saved file path will be shown after you pick a location.",
+  "enterpriseAdminActionExportUnavailable": "This account does not have export permission yet, so export actions stay disabled.",
+  "enterpriseAdminExportCancelled": "Export was cancelled.",
+  "enterpriseAdminExportSuccess": "Export completed: {path}",
+  "enterpriseAdminSyncCompleted": "Organization data has been synced successfully.",
+  "enterpriseAdminPreviewEmployeesTitle": "Employee snapshot",
+  "enterpriseAdminPreviewEmployeesSubtitle": "Read the latest employee records and open a lightweight detail sheet",
+  "enterpriseAdminPreviewEmployeesEmpty": "No employee data is available yet.",
+  "enterpriseAdminPreviewDepartmentsTitle": "Department snapshot",
+  "enterpriseAdminPreviewDepartmentsSubtitle": "Review leaders, member counts, and department notes",
+  "enterpriseAdminPreviewDepartmentsEmpty": "No department data is available yet.",
+  "enterpriseAdminPreviewOpenAll": "View all",
+  "enterpriseAdminPreviewPositionsTitle": "Position snapshot",
+  "enterpriseAdminPreviewPositionsSubtitle": "Review levels, headcount, and open quota at a glance",
+  "enterpriseAdminPreviewPositionsEmpty": "No position data is available yet.",
+  "enterpriseAdminPreviewAccountsTitle": "Account snapshot",
+  "enterpriseAdminPreviewAccountsSubtitle": "Review account identity, mapped role, and enablement status",
+  "enterpriseAdminPreviewAccountsEmpty": "No account data is available yet.",
+  "enterpriseAdminPreviewAccountEnabled": "Enabled",
+  "enterpriseAdminPreviewAccountDisabled": "Disabled",
+  "enterpriseAdminEmployeesPageTitle": "Employee list",
+  "enterpriseAdminEmployeesPageSubtitle": "Move employee records into a dedicated read-only page so they are easier to scan and search continuously.",
+  "enterpriseAdminEmployeesSearchHint": "Search by name, employee number, department, or position",
+  "enterpriseAdminEmployeesPageSummary": "{count} employees currently in scope",
+  "@enterpriseAdminEmployeesPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminEmployeesEmpty": "No employee records match the current filter.",
+  "enterpriseAdminEmployeesStatsDepartments": "Departments covered",
+  "enterpriseAdminEmployeesStatsPositions": "Positions covered",
+  "enterpriseAdminDepartmentsPageTitle": "Department list",
+  "enterpriseAdminDepartmentsPageSubtitle": "Break out leaders, member size, and notes into a dedicated view for organization-level browsing.",
+  "enterpriseAdminDepartmentsSearchHint": "Search by department name or leader",
+  "enterpriseAdminDepartmentsPageSummary": "{count} departments currently in scope",
+  "@enterpriseAdminDepartmentsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminDepartmentsEmpty": "No department records match the current filter.",
+  "enterpriseAdminDepartmentsMemberCount": "{count} members",
+  "@enterpriseAdminDepartmentsMemberCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminDepartmentsStatsMembers": "Total members",
+  "enterpriseAdminDepartmentsStatsLargest": "Largest team",
+  "enterpriseAdminDepartmentsFilterLarge": "10+ members",
+  "enterpriseAdminDepartmentsFilterMedium": "5-9 members",
+  "enterpriseAdminDepartmentsFilterCompact": "Under 5",
+  "enterpriseAdminPositionsPageTitle": "Position list",
+  "enterpriseAdminPositionsPageSubtitle": "Break out position level, headcount, and hiring gap into a dedicated read-only view for staffing reviews.",
+  "enterpriseAdminPositionsSearchHint": "Search by position title, department, or level",
+  "enterpriseAdminPositionsPageSummary": "{count} positions currently in scope",
+  "@enterpriseAdminPositionsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminPositionsEmpty": "No position records match the current filter.",
+  "enterpriseAdminPositionsVacancy": "{count} open",
+  "@enterpriseAdminPositionsVacancy": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminPositionsStatsHeadcount": "Headcount",
+  "enterpriseAdminPositionsStatsVacancy": "Hiring gap",
+  "enterpriseAdminAccountsPageTitle": "Account list",
+  "enterpriseAdminAccountsPageSubtitle": "Collect visible system accounts into a dedicated read-only page so login ID, role, and enablement are easier to verify.",
+  "enterpriseAdminAccountsSearchHint": "Search by account name or login ID",
+  "enterpriseAdminAccountsPageSummary": "{count} accounts currently in scope",
+  "@enterpriseAdminAccountsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminAccountsEmpty": "No account records match the current filter.",
+  "enterpriseAdminAccountsStatsEnabled": "Enabled",
+  "enterpriseAdminAccountsStatsDisabled": "Disabled",
+  "enterpriseAdminChangeRequestsPageTitle": "Change center",
+  "enterpriseAdminChangeRequestsPageSubtitle": "Review direct edits and submitted drafts in one place so recent management changes are easier to follow.",
+  "enterpriseAdminChangeRequestsPageSummary": "{count} change requests currently in scope",
+  "@enterpriseAdminChangeRequestsPageSummary": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminChangeRequestsMetricTotal": "Total requests",
+  "enterpriseAdminChangeRequestsMetricApplied": "Applied",
+  "enterpriseAdminChangeRequestsMetricDrafted": "Drafted",
+  "enterpriseAdminChangeRequestsSearchHint": "Search by request number, object, note, or requester",
+  "enterpriseAdminChangeRequestsEmpty": "No change requests match the current filter.",
+  "enterpriseAdminChangeRequestsStatusApplied": "Applied",
+  "enterpriseAdminChangeRequestsStatusDrafted": "Drafted",
+  "enterpriseAdminChangeRequestsStatusRejected": "Rejected",
+  "enterpriseAdminChangeRequestsEntityEmployee": "Employee",
+  "enterpriseAdminChangeRequestsEntityDepartment": "Department",
+  "enterpriseAdminChangeRequestsEntityPosition": "Position",
+  "enterpriseAdminChangeRequestsEntityAccount": "Account",
+  "enterpriseAdminChangeRequestsOpenRecord": "Open related record",
+  "enterpriseAdminChangeRequestsRequester": "Requester",
+  "enterpriseAdminChangeRequestsSubmittedAt": "Submitted at",
+  "enterpriseAdminChangeRequestDetailTitle": "Change request detail",
+  "enterpriseAdminChangeRequestDetailSubtitle": "Review the saved snapshot and context for this {entityType} change.",
+  "@enterpriseAdminChangeRequestDetailSubtitle": {
+    "placeholders": {
+      "entityType": {}
+    }
+  },
+  "enterpriseAdminChangeRequestDetailLoadFailed": "Failed to load this change request detail.",
+  "enterpriseAdminChangeRequestDetailStatus": "Status",
+  "enterpriseAdminChangeRequestDetailNoteTitle": "Change note",
+  "enterpriseAdminChangeRequestDetailObjectLabel": "Target object",
+  "enterpriseAdminChangeRequestDetailSnapshotTitle": "Saved snapshot",
+  "enterpriseAdminChangeRequestDetailSnapshotSubtitle": "These are the fields captured when the draft or direct edit was submitted.",
+  "enterpriseAdminChangeRequestDetailSnapshotEmpty": "No field snapshot is available for this request.",
+  "enterpriseAdminChangeRequestDetailCompareTitle": "Field comparison",
+  "enterpriseAdminChangeRequestDetailCompareSubtitle": "Compare the submitted snapshot with the current live record to spot drift quickly.",
+  "enterpriseAdminChangeRequestDetailCompareEmpty": "No comparable fields are available for this request.",
+  "enterpriseAdminChangeRequestDetailCompareSnapshot": "Snapshot value",
+  "enterpriseAdminChangeRequestDetailCompareCurrent": "Current value",
+  "enterpriseAdminChangeRequestDetailCompareSame": "Same",
+  "enterpriseAdminChangeRequestDetailCompareDifferent": "Different",
+  "enterpriseAdminChangeRequestDetailCompareUnavailable": "Unavailable",
+  "enterpriseAdminChangeRequestApprove": "Approve change",
+  "enterpriseAdminChangeRequestReject": "Reject change",
+  "enterpriseAdminChangeRequestProcessing": "Processing...",
+  "enterpriseAdminChangeRequestApproveSuccess": "The change request was approved.",
+  "enterpriseAdminChangeRequestRejectSuccess": "The change request was rejected.",
+  "enterpriseAdminChangeRequestReviewUnavailable": "The current account cannot review this change request.",
+  "enterpriseAdminDetailPanelSubtitle": "This is a read-only detail view for quickly verifying records and organization context.",
+  "enterpriseAdminDetailPanelHint": "Edit flows, approval hooks, and audit trails can land here later once the real management actions are wired in.",
+  "enterpriseAdminDetailActionEdit": "Edit placeholder",
+  "enterpriseAdminDetailActionDirectEdit": "Edit employee",
+  "enterpriseAdminDetailActionRequestChange": "Request change",
+  "enterpriseAdminDetailActionAudit": "Change log",
+  "enterpriseAdminDetailActionClose": "Close",
+  "enterpriseAdminEditActionCollapse": "Collapse edit",
+  "enterpriseAdminEditPanelTitle": "Direct edit",
+  "enterpriseAdminEditPanelHint": "Update the employee record here and save it directly to the backend. The list and detail view will refresh immediately after the request succeeds.",
+  "enterpriseAdminEditEmployeeTitle": "Edit employee profile",
+  "enterpriseAdminEditEmployeeHint": "This panel writes employee profile fields directly to the backend. Use it for fast corrections to department, position, email, and phone.",
+  "enterpriseAdminEditDepartmentTitle": "Edit department profile",
+  "enterpriseAdminEditDepartmentHint": "This panel writes department profile fields directly to the backend view. The department card, employee labels, and position ownership will refresh after save.",
+  "enterpriseAdminEditPositionTitle": "Edit position profile",
+  "enterpriseAdminEditPositionHint": "This panel writes position title, level, and hiring gap directly to the backend staffing view. Employee labels and position summaries will refresh after save.",
+  "enterpriseAdminEditAccountTitle": "Edit account access",
+  "enterpriseAdminEditAccountHint": "This panel writes account role and enabled state to the backend access layer. Login, session restore, and permission checks will use the updated values.",
+  "enterpriseAdminEditSubmit": "Save changes",
+  "enterpriseAdminEditSaving": "Saving...",
+  "enterpriseAdminEditSaveSuccess": "Changes were saved.",
+  "enterpriseAdminEditEmpty": "Please complete all editable fields first.",
+  "enterpriseAdminDraftActionCollapse": "Collapse draft",
+  "enterpriseAdminDraftPanelTitle": "Request change",
+  "enterpriseAdminDraftPanelHint": "This step generates a local change draft first so the intended update is easy to review; later it can submit to real write APIs or approval flows.",
+  "enterpriseAdminDraftCurrentSnapshot": "Current field snapshot",
+  "enterpriseAdminDraftInputHint": "Describe the requested change, for example: change the department owner to Wang Wu because of a rotation.",
+  "enterpriseAdminDraftSubmit": "Create change draft",
+  "enterpriseAdminDraftSubmitting": "Submitting...",
+  "enterpriseAdminDraftSubmitSuccess": "The change draft was created and added to the local timeline.",
+  "enterpriseAdminDraftSubmitSuccessWithRequest": "The change draft was submitted. Request No.: {requestNo}",
+  "@enterpriseAdminDraftSubmitSuccessWithRequest": {
+    "placeholders": {
+      "requestNo": {}
+    }
+  },
+  "enterpriseAdminDraftEmpty": "Please enter change notes first.",
+  "enterpriseAdminDraftTypeProfile": "Profile fix",
+  "enterpriseAdminDraftTypeOrg": "Org adjustment",
+  "enterpriseAdminDraftTypeStatus": "Status change",
+  "enterpriseAdminDraftTimelineTitle": "{type} draft created",
+  "@enterpriseAdminDraftTimelineTitle": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "enterpriseAdminDraftTimelineDetail": "Draft notes: {note}",
+  "@enterpriseAdminDraftTimelineDetail": {
+    "placeholders": {
+      "note": {}
+    }
+  },
+  "enterpriseAdminDraftTimelineDetailWithRequest": "Draft notes: {note}. Request No.: {requestNo}",
+  "@enterpriseAdminDraftTimelineDetailWithRequest": {
+    "placeholders": {
+      "note": {},
+      "requestNo": {}
+    }
+  },
+  "enterpriseAdminDetailActionCopy": "Copy field",
+  "enterpriseAdminDetailActionOpenRelated": "Open related record",
+  "enterpriseAdminDetailCopySuccess": "Copied: {label}",
+  "@enterpriseAdminDetailCopySuccess": {
+    "placeholders": {
+      "label": {}
+    }
+  },
+  "enterpriseAdminTimelineTitle": "Change timeline",
+  "enterpriseAdminTimelineHint": "This is a read-only audit trail for quickly checking recent syncs, status changes, and important organization updates.",
+  "enterpriseAdminTimelineEmpty": "No change history is available yet.",
+  "enterpriseAdminTimelineRecent": "Just now",
+  "enterpriseAdminTimelineToday": "Today",
+  "enterpriseAdminTimelineEarlier": "Earlier",
+  "enterpriseAdminTimelineEmployeeStatus": "Employee status updated",
+  "enterpriseAdminTimelineEmployeeStatusDetail": "The current employee status has been synced as {status}.",
+  "@enterpriseAdminTimelineEmployeeStatusDetail": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "enterpriseAdminTimelineEmployeeSync": "Organization info synced",
+  "enterpriseAdminTimelineEmployeeSyncDetail": "The employee is currently in {department} as {position}.",
+  "@enterpriseAdminTimelineEmployeeSyncDetail": {
+    "placeholders": {
+      "department": {},
+      "position": {}
+    }
+  },
+  "enterpriseAdminTimelineEmployeeUpdated": "Employee profile updated",
+  "enterpriseAdminTimelineEmployeeUpdatedDetail": "Updated to {department} / {position}, phone {phone}, email {email}.",
+  "@enterpriseAdminTimelineEmployeeUpdatedDetail": {
+    "placeholders": {
+      "department": {},
+      "position": {},
+      "phone": {},
+      "email": {}
+    }
+  },
+  "enterpriseAdminTimelineEmployeeCreated": "Employee record created",
+  "enterpriseAdminTimelineEmployeeCreatedDetail": "A base record has been created for employee number {employeeNo}.",
+  "@enterpriseAdminTimelineEmployeeCreatedDetail": {
+    "placeholders": {
+      "employeeNo": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentLeader": "Leader confirmed",
+  "enterpriseAdminTimelineDepartmentLeaderDetail": "The current department leader is {leader}.",
+  "@enterpriseAdminTimelineDepartmentLeaderDetail": {
+    "placeholders": {
+      "leader": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentSize": "Team size refreshed",
+  "enterpriseAdminTimelineDepartmentSizeDetail": "The department member count is now {count}.",
+  "@enterpriseAdminTimelineDepartmentSizeDetail": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentUpdated": "Department profile updated",
+  "enterpriseAdminTimelineDepartmentUpdatedDetail": "Updated {name}, leader {leader}.",
+  "@enterpriseAdminTimelineDepartmentUpdatedDetail": {
+    "placeholders": {
+      "name": {},
+      "leader": {}
+    }
+  },
+  "enterpriseAdminTimelineDepartmentCreated": "Department profile created",
+  "enterpriseAdminTimelineDepartmentCreatedDetail": "Base organization data has been created for {name}.",
+  "@enterpriseAdminTimelineDepartmentCreatedDetail": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionVacancy": "Hiring gap synced",
+  "enterpriseAdminTimelinePositionVacancyDetail": "The current hiring gap is {count} positions.",
+  "@enterpriseAdminTimelinePositionVacancyDetail": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionHeadcount": "Headcount updated",
+  "enterpriseAdminTimelinePositionHeadcountDetail": "The approved headcount is now {count}.",
+  "@enterpriseAdminTimelinePositionHeadcountDetail": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionCreated": "Position plan created",
+  "enterpriseAdminTimelinePositionCreatedDetail": "This position plan has been attached to {department}.",
+  "@enterpriseAdminTimelinePositionCreatedDetail": {
+    "placeholders": {
+      "department": {}
+    }
+  },
+  "enterpriseAdminTimelinePositionUpdated": "Position profile updated",
+  "enterpriseAdminTimelinePositionUpdatedDetail": "Updated to {title} / {level} with {openQuota} open roles.",
+  "@enterpriseAdminTimelinePositionUpdatedDetail": {
+    "placeholders": {
+      "title": {},
+      "level": {},
+      "openQuota": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountStatus": "Account status updated",
+  "enterpriseAdminTimelineAccountStatusDetail": "The current account status is {status}.",
+  "@enterpriseAdminTimelineAccountStatusDetail": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountRole": "Role mapping refreshed",
+  "enterpriseAdminTimelineAccountRoleDetail": "The current account role is {role}.",
+  "@enterpriseAdminTimelineAccountRoleDetail": {
+    "placeholders": {
+      "role": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountUpdated": "Account access updated",
+  "enterpriseAdminTimelineAccountUpdatedDetail": "Updated to role {role} with status {status}.",
+  "@enterpriseAdminTimelineAccountUpdatedDetail": {
+    "placeholders": {
+      "role": {},
+      "status": {}
+    }
+  },
+  "enterpriseAdminTimelineAccountCreated": "Account record created",
+  "enterpriseAdminTimelineAccountCreatedDetail": "The login ID {loginId} has been added to the directory.",
+  "@enterpriseAdminTimelineAccountCreatedDetail": {
+    "placeholders": {
+      "loginId": {}
+    }
+  },
+  "enterpriseAdminDetailEmployeeNo": "Employee No.",
+  "enterpriseAdminDetailDepartment": "Department",
+  "enterpriseAdminDetailPosition": "Position",
+  "enterpriseAdminDetailEmail": "Email",
+  "enterpriseAdminDetailPhone": "Phone",
+  "enterpriseAdminDetailStatus": "Status",
+  "enterpriseAdminDetailLeader": "Leader",
+  "enterpriseAdminDetailMemberCount": "Members",
+  "enterpriseAdminDetailDescription": "Description",
+  "enterpriseAdminDetailLevel": "Level",
+  "enterpriseAdminDetailHeadcount": "Headcount",
+  "enterpriseAdminDetailVacancy": "Vacancy",
+  "enterpriseAdminDetailLoginId": "Login ID",
+  "enterpriseAdminDetailRole": "Role",
+  "enterpriseAdminMetricEmployees": "Employees",
+  "enterpriseAdminMetricDepartments": "Departments",
+  "enterpriseAdminMetricPositions": "Positions",
+  "enterpriseAdminMetricAccounts": "Enabled accounts",
+  "enterpriseAdminModuleEmployeesTitle": "Employee records",
+  "enterpriseAdminModuleEmployeesSubtitle": "Review employee profiles, statuses, and organizational placement",
+  "enterpriseAdminModuleDepartmentsTitle": "Department setup",
+  "enterpriseAdminModuleDepartmentsSubtitle": "Maintain structure, owners, and staffing boundaries",
+  "enterpriseAdminModulePositionsTitle": "Position planning",
+  "enterpriseAdminModulePositionsSubtitle": "Track levels, quotas, and open headcount",
+  "enterpriseAdminModuleAccountsTitle": "Account control",
+  "enterpriseAdminModuleAccountsSubtitle": "Configure admin roles and account enablement",
+  "enterpriseAdminModuleExportTitle": "Export center",
+  "enterpriseAdminModuleExportSubtitle": "Download Excel snapshots when the role allows it",
+  "enterpriseAdminModuleAllowedHint": "Available for the current role",
+  "enterpriseAdminStatusAvailable": "Available",
+  "enterpriseAdminStatusLocked": "Locked",
+  "enterpriseAdminPermissionLineEmployees": "Maintain employee records",
+  "enterpriseAdminPermissionLineDepartments": "Maintain departments",
+  "enterpriseAdminPermissionLinePositions": "Maintain positions",
+  "enterpriseAdminPermissionLineAccounts": "Configure account permissions",
+  "enterpriseAdminPermissionLineExport": "Export Excel snapshots",
+  "enterpriseAdminExportHeaderEmployeeNo": "Employee No.",
+  "enterpriseAdminExportHeaderName": "Name",
+  "enterpriseAdminExportHeaderDepartment": "Department",
+  "enterpriseAdminExportHeaderPosition": "Position",
+  "enterpriseAdminExportHeaderPhone": "Phone",
+  "enterpriseAdminExportHeaderEmail": "Email",
+  "enterpriseAdminExportHeaderStatus": "Status",
+  "enterpriseAdminExportHeaderLeader": "Leader",
+  "enterpriseAdminExportHeaderCount": "Count",
+  "enterpriseAdminExportHeaderDescription": "Description",
+  "enterpriseAdminExportHeaderLevel": "Level",
+  "enterpriseAdminExportHeaderDepartmentOwned": "Department",
+  "enterpriseAdminExportHeaderHeadcount": "Headcount",
+  "enterpriseAdminExportHeaderVacancy": "Vacancy",
+  "enterpriseAdminMonthJan": "Jan",
+  "enterpriseAdminMonthFeb": "Feb",
+  "enterpriseAdminMonthMar": "Mar",
+  "enterpriseAdminMonthApr": "Apr",
+  "enterpriseAdminMonthMay": "May",
+  "enterpriseAdminMonthJun": "Jun",
+  "enterpriseAdminSessionUserFallback": "Current account",
+  "enterpriseAdminRoleSuperAdmin": "Super admin",
+  "enterpriseAdminRoleHrManager": "HR admin",
+  "enterpriseAdminRoleDepartmentManager": "Department manager",
+  "enterpriseAdminRoleViewer": "Read-only viewer",
+
   "@contactsHeaderOnlineCount": {
     "placeholders": {
       "count": { "type": "int" }
@@ -38,6 +701,152 @@
     "placeholders": {
       "count": { "type": "int" }
     }
-  }
+  },
+  "@workplaceHeroSubtitle": {
+    "placeholders": {
+      "dateLabel": { "type": "String" }
+    }
+  },
+  "@workplaceMetricUnreadMessagesHint": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@workplacePriorityAttendanceDoneDetail": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@workplacePriorityApprovalsPendingSummary": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@workplacePriorityApprovalsPendingDetail": {
+    "placeholders": {
+      "approvedCount": { "type": "int" },
+      "rejectedCount": { "type": "int" }
+    }
+  },
+  "@workplacePriorityMessagesUnreadSummary": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@workplacePriorityMessagesUnreadDetail": {
+    "placeholders": {
+      "onlineCount": { "type": "int" }
+    }
+  },
+  "@workplacePriorityMessagesClearDetail": {
+    "placeholders": {
+      "onlineCount": { "type": "int" }
+    }
+  },
+  "@workplaceTimelineAttendanceDoneDetail": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalTitle": {
+    "placeholders": {
+      "applicant": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalPendingDetail": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalApprovedDetail": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineApprovalRejectedDetail": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineMessageTitle": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineMessageUnreadDetail": {
+    "placeholders": {
+      "preview": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "@workplaceTimelineMessageReadDetail": {
+    "placeholders": {
+      "preview": { "type": "String" }
+    }
+  },
+  "@workplaceTimelineTimeToday": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@profileMetricMessagesCaption": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@profileActionEnterpriseAdminSubtitle": {
+    "placeholders": {
+      "role": { "type": "String" }
+    }
+  },
+  "@profileActionComingSoon": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "@enterpriseAdminRoleChip": {
+    "placeholders": {
+      "role": { "type": "String" }
+    }
+  },
+  "@enterpriseAdminSessionChip": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "@enterpriseAdminExportSuccess": {
+    "placeholders": {
+      "path": { "type": "String" }
+    }
+  },
+  "@profileCheckInTimeLabel": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "@salarySlipsSummaryLatest": {
+    "placeholders": {
+      "month": { "type": "String" }
+    }
+  },
+  "@badgesIntroCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "@approvalReasonLabel": {
+    "placeholders": {
+      "reason": { "type": "String" }
+    }
+  },
+  "@approvalSubmittedAtLabel": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "themeToggleSwitchToDark": "Switch to dark mode",
+  "themeToggleSwitchToLight": "Switch to light mode",
+  "themeToggleLabelDark": "Dark",
+  "themeToggleLabelLight": "Light"
 }
 

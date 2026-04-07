@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class HelpFeedbackScreen extends StatefulWidget {
   const HelpFeedbackScreen({super.key});
@@ -23,15 +24,16 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final ProfileProvider profile = context.watch<ProfileProvider>();
-    const List<_FeedbackOption> options = <_FeedbackOption>[
-      _FeedbackOption(value: 'feature', label: '功能建议'),
-      _FeedbackOption(value: 'ui', label: '界面体验'),
-      _FeedbackOption(value: 'bug', label: 'Bug 反馈'),
+    final List<_FeedbackOption> options = <_FeedbackOption>[
+      _FeedbackOption(value: 'feature', label: l10n.helpFeedbackCategoryFeature),
+      _FeedbackOption(value: 'ui', label: l10n.helpFeedbackCategoryUi),
+      _FeedbackOption(value: 'bug', label: l10n.helpFeedbackCategoryBug),
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('帮助与反馈')),
+      appBar: AppBar(title: Text(l10n.helpFeedbackTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         children: <Widget>[
@@ -42,8 +44,8 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: AppColors.border),
             ),
-            child: const Text(
-              '这页现在已经能把反馈真实提交到后端接口，方便你后续接工单、邮件或后台管理。',
+            child: Text(
+              l10n.helpFeedbackIntro,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 height: 1.5,
@@ -51,17 +53,17 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const _FaqCard(
-            title: '为什么消息没有刷新？',
-            answer: '请先确认本地后端已启动，当前消息和个人中心已经开始依赖真实接口。',
+          _FaqCard(
+            title: l10n.helpFeedbackFaqMessagesTitle,
+            answer: l10n.helpFeedbackFaqMessagesAnswer,
           ),
-          const _FaqCard(
-            title: '审批提交后在哪里查看？',
-            answer: '可以在“我的审批”或工作台入口进入审批中心查看最新记录。',
+          _FaqCard(
+            title: l10n.helpFeedbackFaqApprovalTitle,
+            answer: l10n.helpFeedbackFaqApprovalAnswer,
           ),
-          const _FaqCard(
-            title: '登录失败怎么办？',
-            answer: '先确认后端服务正常运行，再检查演示账号 zhangsan / 123456 是否可用。',
+          _FaqCard(
+            title: l10n.helpFeedbackFaqLoginTitle,
+            answer: l10n.helpFeedbackFaqLoginAnswer,
           ),
           const SizedBox(height: 18),
           Container(
@@ -74,8 +76,8 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  '提交反馈',
+                Text(
+                  l10n.helpFeedbackSubmitSectionTitle,
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
@@ -99,8 +101,8 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
                 TextField(
                   controller: _controller,
                   maxLines: 5,
-                  decoration: const InputDecoration(
-                    hintText: '描述你的问题或建议，提交后会通过后端反馈接口保存。',
+                  decoration: InputDecoration(
+                    hintText: l10n.helpFeedbackInputHint,
                     alignLabelWithHint: true,
                   ),
                 ),
@@ -120,7 +122,9 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
                   child: ElevatedButton(
                     onPressed: profile.feedbackSubmitting ? null : _submit,
                     child: Text(
-                      profile.feedbackSubmitting ? '提交中...' : '提交反馈',
+                      profile.feedbackSubmitting
+                          ? l10n.helpFeedbackSubmitting
+                          : l10n.helpFeedbackSubmitButton,
                     ),
                   ),
                 ),
@@ -133,10 +137,11 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
   }
 
   Future<void> _submit() async {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final String text = _controller.text.trim();
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请先填写反馈内容')),
+        SnackBar(content: Text(l10n.helpFeedbackEmptyContent)),
       );
       return;
     }
@@ -151,7 +156,7 @@ class _HelpFeedbackScreenState extends State<HelpFeedbackScreen> {
     if (success) {
       _controller.clear();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('反馈已提交到后端')),
+        SnackBar(content: Text(l10n.helpFeedbackSubmitSuccess)),
       );
     }
   }

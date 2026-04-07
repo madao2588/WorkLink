@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_first_app/app/theme/app_theme.dart';
+import 'package:my_first_app/app/theme/theme_mode_controller.dart';
 import 'package:my_first_app/features/profile/domain/models/general_settings_data.dart';
 import 'package:my_first_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class GeneralSettingsScreen extends StatefulWidget {
   const GeneralSettingsScreen({super.key});
@@ -20,17 +22,18 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
       if (!mounted) {
         return;
       }
-      context.read<ProfileProvider>().loadSettings();
+      _loadSettings();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final ProfileProvider profile = context.watch<ProfileProvider>();
     final GeneralSettingsData? settings = profile.settings;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('通用设置')),
+      appBar: AppBar(title: Text(l10n.generalSettingsTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         children: <Widget>[
@@ -42,10 +45,10 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
           else if (profile.settingsError != null)
             _buildMessageCard(profile.settingsError!)
           else if (settings == null)
-            _buildMessageCard('暂无设置数据')
+            _buildMessageCard(l10n.generalSettingsEmpty)
           else ...<Widget>[
             _SettingsCard(
-              title: '通知偏好',
+              title: l10n.generalSettingsSectionNotifications,
               child: Column(
                 children: <Widget>[
                   SwitchListTile(
@@ -55,8 +58,8 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
                     ),
                     contentPadding: EdgeInsets.zero,
                     activeThumbColor: AppColors.brandBlue,
-                    title: const Text('消息推送'),
-                    subtitle: const Text('收到聊天或审批时即时提醒'),
+                    title: Text(l10n.generalSettingsPushTitle),
+                    subtitle: Text(l10n.generalSettingsPushSubtitle),
                   ),
                   SwitchListTile(
                     value: settings.soundEnabled,
@@ -65,30 +68,30 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
                     ),
                     contentPadding: EdgeInsets.zero,
                     activeThumbColor: AppColors.brandBlue,
-                    title: const Text('声音提醒'),
-                    subtitle: const Text('允许声音反馈和系统提示'),
+                    title: Text(l10n.generalSettingsSoundTitle),
+                    subtitle: Text(l10n.generalSettingsSoundSubtitle),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
             _SettingsCard(
-              title: '显示与偏好',
+              title: l10n.generalSettingsSectionDisplay,
               child: Column(
                 children: <Widget>[
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('语言'),
-                    subtitle: const Text('设置界面显示语言'),
+                    title: Text(l10n.generalSettingsLanguageTitle),
+                    subtitle: Text(l10n.generalSettingsLanguageSubtitle),
                     trailing: DropdownButton<String>(
                       value: settings.language,
                       underline: const SizedBox.shrink(),
-                      items: const <DropdownMenuItem<String>>[
+                      items: <DropdownMenuItem<String>>[
                         DropdownMenuItem<String>(
                           value: 'zh-CN',
-                          child: Text('简体中文'),
+                          child: Text(l10n.generalSettingsLanguageZhHans),
                         ),
-                        DropdownMenuItem<String>(
+                        const DropdownMenuItem<String>(
                           value: 'en-US',
                           child: Text('English'),
                         ),
@@ -103,19 +106,19 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('主题'),
-                    subtitle: const Text('后端已保存当前主题模式'),
+                    title: Text(l10n.generalSettingsThemeTitle),
+                    subtitle: Text(l10n.generalSettingsThemeSubtitle),
                     trailing: DropdownButton<String>(
                       value: settings.themeMode,
                       underline: const SizedBox.shrink(),
-                      items: const <DropdownMenuItem<String>>[
+                      items: <DropdownMenuItem<String>>[
                         DropdownMenuItem<String>(
                           value: 'light',
-                          child: Text('Light'),
+                          child: Text(l10n.generalSettingsThemeLight),
                         ),
                         DropdownMenuItem<String>(
                           value: 'dark',
-                          child: Text('Dark'),
+                          child: Text(l10n.generalSettingsThemeDark),
                         ),
                       ],
                       onChanged: (String? value) {
@@ -131,7 +134,7 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
             ),
             const SizedBox(height: 16),
             _SettingsCard(
-              title: '其他',
+              title: l10n.generalSettingsSectionOther,
               child: Column(
                 children: <Widget>[
                   ListTile(
@@ -140,17 +143,17 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
                       Icons.cleaning_services_outlined,
                       color: AppColors.brandBlue,
                     ),
-                    title: const Text('缓存大小'),
+                    title: Text(l10n.generalSettingsCacheSizeTitle),
                     subtitle: Text(settings.cacheSize),
                   ),
-                  const ListTile(
+                  ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.info_outline_rounded,
                       color: AppColors.info,
                     ),
-                    title: Text('当前版本'),
-                    subtitle: Text('WorkLink 1.0.0'),
+                    title: Text(l10n.generalSettingsVersionTitle),
+                    subtitle: Text(l10n.generalSettingsVersionValue),
                   ),
                 ],
               ),
@@ -162,7 +165,25 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
   }
 
   Future<void> _updateSettings(GeneralSettingsData nextSettings) async {
+    context.read<AppThemeModeController>().setThemeModeFromSetting(
+      nextSettings.themeMode,
+    );
     await context.read<ProfileProvider>().updateSettings(nextSettings);
+  }
+
+  Future<void> _loadSettings() async {
+    final ProfileProvider profileProvider = context.read<ProfileProvider>();
+    await profileProvider.loadSettings();
+    if (!mounted) {
+      return;
+    }
+    final GeneralSettingsData? settings = profileProvider.settings;
+    if (settings == null) {
+      return;
+    }
+    context.read<AppThemeModeController>().setThemeModeFromSetting(
+      settings.themeMode,
+    );
   }
 
   Widget _buildMessageCard(String message) {

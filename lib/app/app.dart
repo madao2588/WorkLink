@@ -1,6 +1,7 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:my_first_app/app/shared/network/api_client.dart';
 import 'package:my_first_app/app/shared/network/app_api_config.dart';
@@ -15,11 +16,17 @@ import 'package:my_first_app/features/chat/data/repositories/chat_api_repository
 import 'package:my_first_app/features/chat/domain/repositories/chat_repository.dart';
 import 'package:my_first_app/features/chat/presentation/providers/chat_provider.dart';
 import 'package:my_first_app/features/contacts/presentation/providers/contacts_provider.dart';
+import 'package:my_first_app/features/enterprise_admin/data/repositories/enterprise_admin_api_repository.dart';
+import 'package:my_first_app/features/enterprise_admin/application/enterprise_excel_export_service.dart';
+import 'package:my_first_app/features/enterprise_admin/domain/repositories/enterprise_admin_repository.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/providers/enterprise_admin_provider.dart';
 import 'package:my_first_app/features/profile/data/profile_repository.dart';
 import 'package:my_first_app/features/profile/presentation/providers/profile_provider.dart';
 
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
+import 'theme/theme_mode_controller.dart';
+import 'package:my_first_app/app/shared/widgets/app_theme_toggle_button.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 
 class WorkLinkBootstrap extends StatelessWidget {
@@ -50,6 +57,13 @@ class WorkLinkBootstrap extends StatelessWidget {
         Provider<ChatRepository>(
           create: (BuildContext context) =>
               ChatApiRepository(apiClient: context.read<ApiClient>()),
+        ),
+        Provider<EnterpriseExcelExportService>(
+          create: (_) => EnterpriseExcelExportService(),
+        ),
+        Provider<EnterpriseAdminRepository>(
+          create: (BuildContext context) =>
+              EnterpriseAdminApiRepository(apiClient: context.read<ApiClient>()),
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (BuildContext context) => UserProvider(
@@ -142,23 +156,83 @@ class WorkLinkBootstrap extends StatelessWidget {
                 return resolved;
               },
         ),
+        ChangeNotifierProxyProvider<ProfileProvider, AppThemeModeController>(
+          create: (_) => AppThemeModeController(),
+          update:
+              (
+                BuildContext context,
+                ProfileProvider profileProvider,
+                AppThemeModeController? controller,
+              ) {
+                final AppThemeModeController resolved =
+                    controller ?? AppThemeModeController();
+                final String? themeMode = profileProvider.settings?.themeMode;
+                if (themeMode != null) {
+                  resolved.setThemeModeFromSetting(themeMode);
+                }
+                return resolved;
+              },
+        ),
+        ChangeNotifierProxyProvider<UserProvider, EnterpriseAdminProvider>(
+          create: (BuildContext context) => EnterpriseAdminProvider(
+            exportService: context.read<EnterpriseExcelExportService>(),
+            repository: context.read<EnterpriseAdminRepository>(),
+          ),
+          update:
+              (
+                BuildContext context,
+                UserProvider userProvider,
+                EnterpriseAdminProvider? provider,
+              ) {
+                final EnterpriseAdminProvider resolved =
+                    provider ??
+                    EnterpriseAdminProvider(
+                      exportService: context.read<EnterpriseExcelExportService>(),
+                      repository: context.read<EnterpriseAdminRepository>(),
+                    );
+                resolved.syncSession(userProvider.currentUser);
+                return resolved;
+              },
+        ),
       ],
       child: const WorkLinkApp(),
     );
   }
 }
 
-class WorkLinkApp extends StatelessWidget {
+class WorkLinkApp extends StatefulWidget {
   const WorkLinkApp({super.key});
 
   @override
+  State<WorkLinkApp> createState() => _WorkLinkAppState();
+}
+
+class _WorkLinkAppState extends State<WorkLinkApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = AppRouter.createRouter(context.read<UserProvider>());
+  }
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = context.watch<UserProvider>();
+    final AppThemeModeController themeController =
+        context.watch<AppThemeModeController>();
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'WorkLink',
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeController.themeMode,
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -177,7 +251,22 @@ class WorkLinkApp extends StatelessWidget {
             }
             return supportedLocales.first;
           },
-      routerConfig: AppRouter.createRouter(userProvider),
+      builder: (BuildContext context, Widget? child) {
+        return Stack(
+          children: <Widget>[
+            Positioned.fill(child: child ?? const SizedBox.shrink()),
+            const Positioned(
+              top: 0,
+              right: 0,
+              child: SafeArea(
+                minimum: EdgeInsets.fromLTRB(12, 8, 16, 0),
+                child: AppThemeCornerButton(),
+              ),
+            ),
+          ],
+        );
+      },
+      routerConfig: _router,
     );
   }
 }

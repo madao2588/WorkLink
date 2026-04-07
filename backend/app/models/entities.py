@@ -173,3 +173,19 @@ class Notification(Base):
     biz_id: Mapped[str | None] = mapped_column(String(40), nullable=True)
     is_read: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
+
+
+class ChangeRequest(Base):
+    __tablename__ = "change_requests"
+
+    id: Mapped[str] = mapped_column(String(40), primary_key=True, default=lambda: f"cr_{uuid4().hex[:12]}")
+    request_no: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
+    requester_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False)
+    entity_type: Mapped[str] = mapped_column(String(40), nullable=False)
+    entity_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    entity_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    change_type: Mapped[str] = mapped_column(String(40), nullable=False)
+    note: Mapped[str] = mapped_column(Text, nullable=False)
+    snapshot: Mapped[str] = mapped_column(Text, default="{}")
+    status: Mapped[str] = mapped_column(String(20), default="DRAFTED")
+    submitted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC))

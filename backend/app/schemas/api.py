@@ -66,3 +66,36 @@ class FeedbackRequest(BaseModel):
     content: str
     contact: str | None = None
     attachments: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class CreateChangeRequestRequest(BaseModel):
+    entityType: str
+    entityId: str
+    entityName: str
+    changeType: str
+    note: str
+    snapshot: dict[str, str] = Field(default_factory=dict)
+
+
+class UpdateEmployeeRequest(BaseModel):
+    departmentId: str
+    position: str
+    email: str
+    mobile: str
+
+
+class UpdateDepartmentRequest(BaseModel):
+    name: str
+    leader: str
+    description: str
+
+
+class UpdateAccountRequest(BaseModel):
+    role: str
+    enabled: bool
+
+
+class UpdatePositionRequest(BaseModel):
+    title: str
+    level: str
+    openQuota: int

@@ -50,6 +50,16 @@ class AuthRepository {
         name: userData['name'] as String,
         avatar: userData['avatar'] as String,
         department: userData['department'] as String,
+        loginId: userData['loginId'] as String? ?? loginId,
+        departmentId: userData['departmentId'] as String?,
+        position: userData['position'] as String?,
+        employeeNo: userData['employeeNo'] as String?,
+        email: userData['email'] as String?,
+        mobileMasked: userData['mobileMasked'] as String?,
+        role: userData['role'] as String?,
+        permissions: (userData['permissions'] as List<dynamic>? ?? <dynamic>[])
+            .whereType<String>()
+            .toList(),
         isOnline: userData['isOnline'] as bool? ?? false,
       ),
       accessToken: data['accessToken'] as String,
@@ -77,6 +87,16 @@ class AuthRepository {
       name: data['name'] as String,
       avatar: data['avatar'] as String,
       department: data['department'] as String,
+      loginId: data['loginId'] as String?,
+      departmentId: data['departmentId'] as String?,
+      position: data['position'] as String?,
+      employeeNo: data['employeeNo'] as String?,
+      email: data['email'] as String?,
+      mobileMasked: data['mobileMasked'] as String?,
+      role: data['role'] as String?,
+      permissions: (data['permissions'] as List<dynamic>? ?? <dynamic>[])
+          .whereType<String>()
+          .toList(),
       isOnline: data['isOnline'] as bool? ?? false,
     );
   }

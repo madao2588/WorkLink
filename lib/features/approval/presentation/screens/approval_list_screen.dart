@@ -4,31 +4,31 @@ import 'package:provider/provider.dart';
 
 import 'package:my_first_app/features/approval/domain/models/approval_model.dart';
 import 'package:my_first_app/features/approval/presentation/providers/approval_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class ApprovalListScreen extends StatelessWidget {
   const ApprovalListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 1. 监听审批大脑的数据变化
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final approvalProvider = context.watch<ApprovalProvider>();
     final list = approvalProvider.approvals;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的审批'),
+        title: Text(l10n.approvalTitle),
         elevation: 0.5,
       ),
       body: list.isEmpty
-          ? _buildEmptyState()
+          ? _buildEmptyState(l10n)
           : ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, index) {
                 final item = list[index];
-                return _buildApprovalCard(context, item);
+                return _buildApprovalCard(context, item, l10n);
               },
             ),
-      // 右下角发起申请按钮
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showSubmitDialog(context),
         backgroundColor: Colors.blue,
@@ -37,22 +37,24 @@ class ApprovalListScreen extends StatelessWidget {
     );
   }
 
-  // 为空时的占位界面
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.assignment_outlined, size: 60, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          const Text('暂无申请记录', style: TextStyle(color: Colors.grey)),
+          Text(l10n.approvalEmpty, style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );
   }
 
-  // 每一条审批的卡片 UI
-  Widget _buildApprovalCard(BuildContext context, ApprovalModel item) {
+  Widget _buildApprovalCard(
+    BuildContext context,
+    ApprovalModel item,
+    AppLocalizations l10n,
+  ) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -66,16 +68,17 @@ class ApprovalListScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            Text('申请原因：${item.reason}'),
+            Text(l10n.approvalReasonLabel(item.reason)),
             const SizedBox(height: 4),
             Text(
-              '提交时间：${DateFormat('MM-dd HH:mm').format(item.startTime)}',
+              l10n.approvalSubmittedAtLabel(
+                DateFormat('MM-dd HH:mm').format(item.startTime),
+              ),
               style: const TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
         ),
-        trailing: _buildStatusBadge(item.status),
-        // 只有“待审批”状态才能点击进行操作
+        trailing: _buildStatusBadge(item.status, l10n),
         onTap: item.status == ApprovalStatus.pending
             ? () => _showActionSheet(context, item.id)
             : null,
@@ -83,22 +86,21 @@ class ApprovalListScreen extends StatelessWidget {
     );
   }
 
-  // 状态标签：根据状态显示颜色
-  Widget _buildStatusBadge(ApprovalStatus status) {
+  Widget _buildStatusBadge(ApprovalStatus status, AppLocalizations l10n) {
     Color color;
     String text;
     switch (status) {
       case ApprovalStatus.pending:
         color = Colors.orange;
-        text = "审批中";
+        text = l10n.approvalStatusPending;
         break;
       case ApprovalStatus.approved:
         color = Colors.green;
-        text = "已通过";
+        text = l10n.approvalStatusApproved;
         break;
       case ApprovalStatus.rejected:
         color = Colors.red;
-        text = "已驳回";
+        text = l10n.approvalStatusRejected;
         break;
     }
     return Container(
@@ -114,8 +116,8 @@ class ApprovalListScreen extends StatelessWidget {
     );
   }
 
-  // 底部弹出操作菜单（同意/驳回）
   void _showActionSheet(BuildContext context, String id) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -125,14 +127,17 @@ class ApprovalListScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text('审批决策', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                l10n.approvalDecisionTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             const Divider(height: 1),
             ListTile(
               leading: const Icon(Icons.check_circle, color: Colors.green),
-              title: const Text('同意申请'),
+              title: Text(l10n.approvalApproveAction),
               onTap: () {
                 context.read<ApprovalProvider>().approve(id);
                 Navigator.pop(context);
@@ -140,7 +145,7 @@ class ApprovalListScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.cancel, color: Colors.red),
-              title: const Text('驳回申请'),
+              title: Text(l10n.approvalRejectAction),
               onTap: () {
                 context.read<ApprovalProvider>().reject(id);
                 Navigator.pop(context);
@@ -153,25 +158,25 @@ class ApprovalListScreen extends StatelessWidget {
     );
   }
 
-  // 发起请假申请的弹窗
   void _showSubmitDialog(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('发起申请'),
+        title: Text(l10n.approvalSubmitDialogTitle),
         content: TextField(
           controller: controller,
           maxLines: 3,
-          decoration: const InputDecoration(
-            hintText: '请输入申请原因（如：感冒请假）',
+          decoration: InputDecoration(
+            hintText: l10n.approvalSubmitDialogHint,
             border: OutlineInputBorder(),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
+            child: Text(l10n.approvalDialogCancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -180,7 +185,7 @@ class ApprovalListScreen extends StatelessWidget {
                 Navigator.pop(context);
               }
             },
-            child: const Text('提交'),
+            child: Text(l10n.approvalDialogSubmit),
           ),
         ],
       ),

@@ -68,6 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final UserProvider userProvider = context.watch<UserProvider>();
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final bool darkMode = AppThemePalette.isDark(context);
+    final Color pageBackground = AppThemePalette.pageBackground(context);
+    final Color secondaryText = AppThemePalette.textSecondary(context);
 
     return Scaffold(
       body: LayoutBuilder(
@@ -78,18 +81,16 @@ class _LoginScreenState extends State<LoginScreen> {
               child: IntrinsicHeight(
                 child: Stack(
                   children: <Widget>[
-                    Positioned.fill(
-                      child: Container(color: AppColors.background),
-                    ),
+                    Positioned.fill(child: Container(color: pageBackground)),
                     Positioned(
                       top: -140,
                       left: -60,
                       right: -60,
                       child: Container(
                         height: 360,
-                        decoration: const BoxDecoration(
-                          gradient: AppColors.heroGradient,
-                          borderRadius: BorderRadius.vertical(
+                        decoration: BoxDecoration(
+                          gradient: AppThemePalette.heroGradient(context),
+                          borderRadius: const BorderRadius.vertical(
                             bottom: Radius.circular(56),
                           ),
                         ),
@@ -120,14 +121,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 16),
                             _buildHeroHeader(l10n),
                             const SizedBox(height: 28),
-                            _buildLoginCard(userProvider),
+                            _buildLoginCard(userProvider, darkMode: darkMode),
                             const Spacer(),
                             const SizedBox(height: 20),
                             Center(
                               child: Text(
                                 l10n.loginDemoAccount,
                                 style: TextStyle(
-                                  color: AppColors.textSecondary.withAlpha(170),
+                                  color: secondaryText.withAlpha(170),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -197,21 +198,26 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginCard(UserProvider userProvider) {
+  Widget _buildLoginCard(UserProvider userProvider, {required bool darkMode}) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final Color cardSurface = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardSurface,
         borderRadius: BorderRadius.circular(32),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: const Color(0xFF1456F0).withAlpha(22),
+            color: (darkMode ? const Color(0xFF0A1220) : const Color(0xFF1456F0))
+                .withAlpha(darkMode ? 34 : 22),
             blurRadius: 30,
             offset: const Offset(0, 16),
           ),
         ],
-        border: Border.all(color: Colors.white.withAlpha(200)),
+        border: Border.all(color: borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
+              color: titleColor,
             ),
           ),
           const SizedBox(height: 8),
@@ -230,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
-              color: AppColors.textSecondary,
+              color: subtitleColor,
             ),
           ),
           const SizedBox(height: 24),

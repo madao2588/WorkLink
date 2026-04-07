@@ -53,6 +53,10 @@ class _MessageListScreenState extends State<MessageListScreen> {
   @override
   Widget build(BuildContext context) {
     final ChatProvider chatProvider = context.watch<ChatProvider>();
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
     final List<ConversationSummary> allSummaries =
         chatProvider.conversationSummaries;
     final List<ConversationSummary> onlineSummaries = allSummaries
@@ -64,6 +68,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
         .toList();
 
     return Scaffold(
+      backgroundColor: AppThemePalette.pageBackground(context),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -88,13 +93,17 @@ class _MessageListScreenState extends State<MessageListScreen> {
                     ),
                   ],
                   const SizedBox(height: 20),
-                  _buildSearchBox(),
+                  _buildSearchBox(surfaceColor),
                   const SizedBox(height: 14),
-                  _buildFilterPanel(chatProvider),
+                  _buildFilterPanel(chatProvider, surfaceColor, borderColor),
                   const SizedBox(height: 14),
                   _buildInboxSummary(
                     conversationCount: filteredSummaries.length,
                     unreadCount: chatProvider.unreadConversationCount,
+                    backgroundColor: AppThemePalette.subtleSurface(context),
+                    borderColor: AppThemePalette.strongBorder(context),
+                    subtitleColor: subtitleColor,
+                    titleColor: titleColor,
                   ),
                   const SizedBox(height: 22),
                   _buildSectionTitle(
@@ -165,14 +174,14 @@ class _MessageListScreenState extends State<MessageListScreen> {
     );
   }
 
-  Widget _buildSearchBox() {
+  Widget _buildSearchBox(Color surfaceColor) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(8),
+            color: AppThemePalette.shadow(context),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -202,16 +211,20 @@ class _MessageListScreenState extends State<MessageListScreen> {
     );
   }
 
-  Widget _buildFilterPanel(ChatProvider chatProvider) {
+  Widget _buildFilterPanel(
+    ChatProvider chatProvider,
+    Color surfaceColor,
+    Color borderColor,
+  ) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(6),
+            color: AppThemePalette.shadow(context),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -249,6 +262,9 @@ class _MessageListScreenState extends State<MessageListScreen> {
     required int count,
   }) {
     final bool selected = _filter == filter;
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color labelColor = AppThemePalette.textSecondary(context);
 
     return ChoiceChip(
       selected: selected,
@@ -256,26 +272,30 @@ class _MessageListScreenState extends State<MessageListScreen> {
       onSelected: (_) => setState(() => _filter = filter),
       selectedColor: AppColors.brandBlue.withAlpha(16),
       labelStyle: TextStyle(
-        color: selected ? AppColors.brandBlue : AppColors.textSecondary,
+        color: selected ? AppColors.brandBlue : labelColor,
         fontWeight: FontWeight.w700,
       ),
       side: BorderSide(
-        color: selected ? AppColors.brandBlue : AppColors.border,
+        color: selected ? AppColors.brandBlue : borderColor,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: surfaceColor,
     );
   }
 
   Widget _buildInboxSummary({
     required int conversationCount,
     required int unreadCount,
+    required Color backgroundColor,
+    required Color borderColor,
+    required Color subtitleColor,
+    required Color titleColor,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FBFF),
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFD9E6FF)),
+        border: Border.all(color: borderColor),
       ),
       child: Row(
         children: [
@@ -294,8 +314,8 @@ class _MessageListScreenState extends State<MessageListScreen> {
               unreadCount > 0
                   ? '当前有 $unreadCount 个未读会话，建议优先处理。'
                   : '所有消息都已处理完，现在可以安心推进别的工作。',
-              style: const TextStyle(
-                color: AppColors.textSecondary,
+              style: TextStyle(
+                color: subtitleColor,
                 height: 1.45,
                 fontWeight: FontWeight.w600,
               ),
@@ -304,8 +324,8 @@ class _MessageListScreenState extends State<MessageListScreen> {
           const SizedBox(width: 12),
           Text(
             '$conversationCount 条',
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: titleColor,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -315,53 +335,57 @@ class _MessageListScreenState extends State<MessageListScreen> {
   }
 
   Widget _buildSectionTitle({required String title, required String subtitle}) {
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+            color: titleColor,
           ),
         ),
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 14, color: subtitleColor),
         ),
       ],
     );
   }
 
   Widget _buildEmptyState() {
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: borderColor),
       ),
-      child: const Column(
+      child: Column(
         children: [
           Icon(
             Icons.mark_chat_read_outlined,
             size: 40,
-            color: AppColors.textHint,
+            color: AppThemePalette.textHint(context),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
             '没有匹配到会话',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: AppThemePalette.textPrimary(context),
               fontWeight: FontWeight.w800,
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
             '可以试试切换筛选，或者搜索不同关键词。',
-            style: TextStyle(color: AppColors.textSecondary),
+            style: TextStyle(color: AppThemePalette.textSecondary(context)),
           ),
         ],
       ),
@@ -406,6 +430,13 @@ class _OnlineCollaboratorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
+    final Color hintColor = AppThemePalette.textHint(context);
+    final Color avatarBackground = AppThemePalette.isDark(context)
+        ? const Color(0xFF22314A)
+        : const Color(0xFFEAF1FF);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -417,8 +448,8 @@ class _OnlineCollaboratorCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: summary.hasUnread
-                  ? const [Color(0xFFF8FBFF), Colors.white]
-                  : const [Colors.white, Color(0xFFF9FAFB)],
+                  ? <Color>[AppThemePalette.subtleSurface(context), surfaceColor]
+                  : <Color>[surfaceColor, AppThemePalette.mutedSurface(context)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -426,11 +457,11 @@ class _OnlineCollaboratorCard extends StatelessWidget {
             border: Border.all(
               color: summary.hasUnread
                   ? AppColors.brandBlue.withAlpha(34)
-                  : AppColors.border,
+                  : borderColor,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(8),
+                color: AppThemePalette.shadow(context),
                 blurRadius: 14,
                 offset: const Offset(0, 8),
               ),
@@ -442,7 +473,7 @@ class _OnlineCollaboratorCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: const Color(0xFFEAF1FF),
+                    backgroundColor: avatarBackground,
                     child: Text(
                       summary.avatar,
                       style: const TextStyle(
@@ -460,7 +491,7 @@ class _OnlineCollaboratorCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.success,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(color: surfaceColor, width: 2),
                       ),
                     ),
                   ),
@@ -476,10 +507,10 @@ class _OnlineCollaboratorCard extends StatelessWidget {
                       summary.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                        color: AppThemePalette.textPrimary(context),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -487,9 +518,9 @@ class _OnlineCollaboratorCard extends StatelessWidget {
                       summary.department,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textSecondary,
+                        color: subtitleColor,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -501,7 +532,7 @@ class _OnlineCollaboratorCard extends StatelessWidget {
                         fontSize: 11,
                         color: summary.hasUnread
                             ? AppColors.brandBlue
-                            : AppColors.textHint,
+                            : hintColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -564,6 +595,14 @@ class _ConversationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool hasUnread = summary.hasUnread;
+    final Color surfaceColor = AppThemePalette.surface(context);
+    final Color borderColor = AppThemePalette.border(context);
+    final Color subtitleColor = AppThemePalette.textSecondary(context);
+    final Color hintColor = AppThemePalette.textHint(context);
+    final Color titleColor = AppThemePalette.textPrimary(context);
+    final Color avatarBackground = AppThemePalette.isDark(context)
+        ? const Color(0xFF22314A)
+        : const Color(0xFFEAF1FF);
 
     return Material(
       color: Colors.transparent,
@@ -573,16 +612,16 @@ class _ConversationCard extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: hasUnread ? const Color(0xFFF9FBFF) : Colors.white,
+            color: hasUnread ? AppThemePalette.subtleSurface(context) : surfaceColor,
             borderRadius: BorderRadius.circular(26),
             border: Border.all(
               color: hasUnread
                   ? AppColors.brandBlue.withAlpha(55)
-                  : AppColors.border,
+                  : borderColor,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(7),
+                color: AppThemePalette.shadow(context),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
               ),
@@ -596,7 +635,7 @@ class _ConversationCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: hasUnread
                       ? AppColors.brandBlue
-                      : AppColors.border.withAlpha(120),
+                      : borderColor.withAlpha(120),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
@@ -605,7 +644,7 @@ class _ConversationCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundColor: const Color(0xFFEAF1FF),
+                    backgroundColor: avatarBackground,
                     child: Text(
                       summary.avatar,
                       style: const TextStyle(
@@ -624,7 +663,7 @@ class _ConversationCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.success,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
+                          border: Border.all(color: surfaceColor, width: 2),
                         ),
                       ),
                     ),
@@ -641,19 +680,19 @@ class _ConversationCard extends StatelessWidget {
                           child: Text(
                             summary.name,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimary,
+                              color: titleColor,
                             ),
                           ),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           _formatMessageTime(summary.latestMessageTime),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textHint,
+                            color: hintColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -670,7 +709,7 @@ class _ConversationCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: summary.isOnline
                                 ? AppColors.success.withAlpha(16)
-                                : const Color(0xFFF2F4F7),
+                                : AppThemePalette.mutedSurface(context),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Text(
@@ -680,7 +719,7 @@ class _ConversationCard extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: summary.isOnline
                                   ? AppColors.success
-                                  : AppColors.textSecondary,
+                                  : subtitleColor,
                             ),
                           ),
                         ),
@@ -690,9 +729,9 @@ class _ConversationCard extends StatelessWidget {
                             summary.isOnline ? summary.department : '最近保持同步',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textHint,
+                              color: hintColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -707,8 +746,8 @@ class _ConversationCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         color: hasUnread
-                            ? AppColors.textPrimary
-                            : AppColors.textSecondary,
+                            ? titleColor
+                            : subtitleColor,
                         fontWeight: hasUnread
                             ? FontWeight.w700
                             : FontWeight.w500,
@@ -743,15 +782,15 @@ class _ConversationCard extends StatelessWidget {
                       ),
                     )
                   else
-                    const Icon(
+                    Icon(
                       Icons.done_all_rounded,
                       size: 18,
-                      color: AppColors.textHint,
+                      color: hintColor,
                     ),
                   const SizedBox(height: 16),
-                  const Icon(
+                  Icon(
                     Icons.chevron_right_rounded,
-                    color: AppColors.textHint,
+                    color: hintColor,
                   ),
                 ],
               ),

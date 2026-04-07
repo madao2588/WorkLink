@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:my_first_app/app/theme/app_theme.dart';
 import 'package:my_first_app/features/profile/domain/models/salary_slip_item.dart';
 import 'package:my_first_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 class SalarySlipsScreen extends StatefulWidget {
   const SalarySlipsScreen({super.key});
@@ -27,19 +28,20 @@ class _SalarySlipsScreenState extends State<SalarySlipsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final ProfileProvider profile = context.watch<ProfileProvider>();
     final List<SalarySlipItem> slips = profile.salarySlips;
     final SalarySlipItem? latest = slips.isEmpty ? null : slips.first;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('工资条')),
+      appBar: AppBar(title: Text(l10n.salarySlipsTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         children: <Widget>[
-          _buildSummaryCard(latest),
+          _buildSummaryCard(latest, l10n),
           const SizedBox(height: 20),
-          const Text(
-            '最近薪资记录',
+          Text(
+            l10n.salarySlipsRecentTitle,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
@@ -55,7 +57,7 @@ class _SalarySlipsScreenState extends State<SalarySlipsScreen> {
           else if (profile.salarySlipsError != null)
             _buildMessageCard(profile.salarySlipsError!)
           else if (slips.isEmpty)
-            _buildMessageCard('暂无工资条数据')
+            _buildMessageCard(l10n.salarySlipsEmpty)
           else
             ...slips.map((SalarySlipItem slip) => Padding(
                   padding: const EdgeInsets.only(bottom: 14),
@@ -66,38 +68,34 @@ class _SalarySlipsScreenState extends State<SalarySlipsScreen> {
     );
   }
 
-  Widget _buildSummaryCard(SalarySlipItem? latest) {
+  Widget _buildSummaryCard(SalarySlipItem? latest, AppLocalizations l10n) {
     final String title = latest == null ? '--' : '¥${latest.netAmount.toStringAsFixed(2)}';
     final String subtitle = latest == null
-        ? '等待后端返回工资条数据'
-        : '最近一期为 ${latest.month}，已在后端工资条接口中同步。';
+        ? l10n.salarySlipsSummaryWaiting
+        : l10n.salarySlipsSummaryLatest(latest.month);
 
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: <Color>[Color(0xFF0F49D7), Color(0xFF3F86FF)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: AppThemePalette.heroGradient(context),
         borderRadius: BorderRadius.circular(30),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: AppColors.brandBlue.withAlpha(28),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
+            color: AppThemePalette.heroShadow(context),
+            blurRadius: 28,
+            offset: const Offset(0, 16),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Row(
+          Row(
             children: <Widget>[
-              Icon(Icons.account_balance_wallet_rounded, color: Colors.white),
-              SizedBox(width: 8),
+              const Icon(Icons.account_balance_wallet_rounded, color: Colors.white),
+              const SizedBox(width: 8),
               Text(
-                '本月实发',
+                l10n.salarySlipsSummaryCurrentNet,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -150,6 +148,7 @@ class _SalarySlipCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -196,10 +195,16 @@ class _SalarySlipCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _SalaryDataRow(label: '实发工资', value: '¥${slip.netAmount.toStringAsFixed(2)}'),
-          _SalaryDataRow(label: '应发工资', value: '¥${slip.grossAmount.toStringAsFixed(2)}'),
           _SalaryDataRow(
-            label: '发放时间',
+            label: l10n.salarySlipsNetPayLabel,
+            value: '¥${slip.netAmount.toStringAsFixed(2)}',
+          ),
+          _SalaryDataRow(
+            label: l10n.salarySlipsGrossPayLabel,
+            value: '¥${slip.grossAmount.toStringAsFixed(2)}',
+          ),
+          _SalaryDataRow(
+            label: l10n.salarySlipsIssuedAtLabel,
             value: DateFormat('yyyy-MM-dd').format(slip.issuedAt),
           ),
         ],

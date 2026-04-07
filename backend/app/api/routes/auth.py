@@ -12,6 +12,7 @@ from app.db.session import get_db
 from app.models.entities import LoginLog, RefreshToken, User
 from app.schemas.api import LoginRequest, LogoutRequest, RefreshTokenRequest
 from app.schemas.response import BooleanResponse, LoginResponse, TokenResponse, UserInfoResponse
+from app.services.access_control import resolve_access_profile
 
 router = APIRouter()
 
@@ -27,6 +28,9 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
     user = db.scalar(select(User).where(User.login_id == payload.loginId))
     if not user or not verify_password(payload.password, user.password_hash):
         raise UnauthorizedException(message="Invalid credentials")
+    access_profile = resolve_access_profile(user, db=db)
+    if not access_profile.enabled:
+        raise UnauthorizedException(message="Account disabled")
 
     access_token = create_access_token(user.id)
     refresh_token = create_refresh_token()
@@ -63,10 +67,16 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
                 "id": user.id,
                 "name": user.name,
                 "avatar": user.avatar,
+                "loginId": user.login_id,
                 "department": user.department.name,
+                "departmentId": user.department_id,
                 "position": user.position,
                 "isOnline": user.is_online,
                 "employeeNo": user.employee_no,
+                "email": user.email,
+                "mobileMasked": _mask_mobile(user.mobile),
+                "role": access_profile.role,
+                "permissions": access_profile.permissions,
             },
         },
     )
@@ -99,13 +109,19 @@ def logout(payload: LogoutRequest, request: Request, db: Session = Depends(get_d
 
 
 @router.get("/me", response_model=UserInfoResponse)
-def me(request: Request, user: User = Depends(get_current_user)) -> dict:
+def me(
+    request: Request,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    access_profile = resolve_access_profile(user, db=db)
     return success_response(
         request,
         {
             "id": user.id,
             "name": user.name,
             "avatar": user.avatar,
+            "loginId": user.login_id,
             "department": user.department.name,
             "departmentId": user.department_id,
             "position": user.position,
@@ -113,6 +129,8 @@ def me(request: Request, user: User = Depends(get_current_user)) -> dict:
             "employeeNo": user.employee_no,
             "email": user.email,
             "mobileMasked": _mask_mobile(user.mobile),
+            "role": access_profile.role,
+            "permissions": access_profile.permissions,
         },
     )
 

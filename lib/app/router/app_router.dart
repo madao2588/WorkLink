@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 import 'package:my_first_app/app/main_shell.dart';
 import 'package:my_first_app/features/approval/presentation/screens/approval_list_screen.dart';
@@ -8,6 +9,13 @@ import 'package:my_first_app/features/auth/presentation/screens/login_screen.dar
 import 'package:my_first_app/features/chat/presentation/screens/chat_detail_screen.dart';
 import 'package:my_first_app/features/chat/presentation/screens/message_list_screen.dart';
 import 'package:my_first_app/features/contacts/presentation/screens/contact_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_department_list_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_employee_list_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_position_list_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_account_list_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_change_request_list_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_change_request_detail_screen.dart';
+import 'package:my_first_app/features/enterprise_admin/presentation/screens/enterprise_admin_screen.dart';
 import 'package:my_first_app/features/profile/presentation/screens/account_security_screen.dart';
 import 'package:my_first_app/features/profile/presentation/screens/badges_screen.dart';
 import 'package:my_first_app/features/profile/presentation/screens/general_settings_screen.dart';
@@ -29,6 +37,13 @@ class AppRoutes {
   static const String accountSecurity = 'accountSecurity';
   static const String generalSettings = 'generalSettings';
   static const String helpFeedback = 'helpFeedback';
+  static const String enterpriseAdmin = 'enterpriseAdmin';
+  static const String enterpriseAdminEmployees = 'enterpriseAdminEmployees';
+  static const String enterpriseAdminDepartments = 'enterpriseAdminDepartments';
+  static const String enterpriseAdminPositions = 'enterpriseAdminPositions';
+  static const String enterpriseAdminAccounts = 'enterpriseAdminAccounts';
+  static const String enterpriseAdminChangeRequests = 'enterpriseAdminChangeRequests';
+  static const String enterpriseAdminChangeRequestDetail = 'enterpriseAdminChangeRequestDetail';
   static const String chatDetail = 'chatDetail';
 }
 
@@ -37,10 +52,45 @@ class AppRouter {
     return GoRouter(
       initialLocation: '/messages',
       refreshListenable: userProvider,
+      errorBuilder: (context, state) {
+        final AppLocalizations l10n = AppLocalizations.of(context)!;
+        return Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(Icons.error_outline, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.routerRecoveryFailedTitle,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    state.error?.toString() ?? 'Unknown route error',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  FilledButton(
+                    onPressed: () => context.go(
+                      userProvider.isAuthenticated ? '/messages' : '/login',
+                    ),
+                    child: Text(l10n.routerReturnToApp),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
       redirect: (context, state) {
         final bool loggedIn = userProvider.currentUser != null;
         final bool goingToLogin = state.matchedLocation == '/login';
         final bool goingToLoading = state.matchedLocation == '/loading';
+        final bool goingToEnterpriseAdmin =
+            state.matchedLocation.startsWith('/enterprise-admin');
 
         // Avoid redirect flicker while we restore/refresh auth tokens.
         if (userProvider.isLoading) {
@@ -57,6 +107,10 @@ class AppRouter {
         }
         if (loggedIn && goingToLogin) {
           return '/messages';
+        }
+        if (goingToEnterpriseAdmin &&
+            !_canAccessEnterpriseAdmin(userProvider)) {
+          return '/profile';
         }
         return null;
       },
@@ -151,6 +205,58 @@ class AppRouter {
           builder: (context, state) => const HelpFeedbackScreen(),
         ),
         GoRoute(
+          path: '/enterprise-admin',
+          name: AppRoutes.enterpriseAdmin,
+          builder: (context, state) => const EnterpriseAdminScreen(),
+          routes: <RouteBase>[
+            GoRoute(
+              path: 'employees',
+              name: AppRoutes.enterpriseAdminEmployees,
+              builder: (context, state) => EnterpriseEmployeeListScreen(
+                initialKeyword: state.uri.queryParameters['keyword'],
+              ),
+            ),
+            GoRoute(
+              path: 'departments',
+              name: AppRoutes.enterpriseAdminDepartments,
+              builder: (context, state) => EnterpriseDepartmentListScreen(
+                initialKeyword: state.uri.queryParameters['keyword'],
+              ),
+            ),
+            GoRoute(
+              path: 'positions',
+              name: AppRoutes.enterpriseAdminPositions,
+              builder: (context, state) => EnterprisePositionListScreen(
+                initialKeyword: state.uri.queryParameters['keyword'],
+              ),
+            ),
+            GoRoute(
+              path: 'accounts',
+              name: AppRoutes.enterpriseAdminAccounts,
+              builder: (context, state) => EnterpriseAccountListScreen(
+                initialKeyword: state.uri.queryParameters['keyword'],
+              ),
+            ),
+            GoRoute(
+              path: 'change-requests',
+              name: AppRoutes.enterpriseAdminChangeRequests,
+              builder: (context, state) => EnterpriseChangeRequestListScreen(
+                initialKeyword: state.uri.queryParameters['keyword'],
+              ),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: ':requestId',
+                  name: AppRoutes.enterpriseAdminChangeRequestDetail,
+                  builder: (context, state) =>
+                      EnterpriseChangeRequestDetailScreen(
+                        requestId: state.pathParameters['requestId']!,
+                      ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        GoRoute(
           path: '/chat/:userId',
           name: AppRoutes.chatDetail,
           builder: (context, state) {
@@ -162,5 +268,14 @@ class AppRouter {
         ),
       ],
     );
+  }
+
+  static bool _canAccessEnterpriseAdmin(UserProvider userProvider) {
+    final List<String> permissions = userProvider.currentUser?.permissions ?? const <String>[];
+    return permissions.contains('manageEmployees') ||
+        permissions.contains('manageDepartments') ||
+        permissions.contains('managePositions') ||
+        permissions.contains('manageAccounts') ||
+        permissions.contains('exportData');
   }
 }
